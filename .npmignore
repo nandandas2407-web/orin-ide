@@ -1,0 +1,22 @@
+# Dev / OS junk
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+
+# Git
+.git/
+.gitignore
+
+# Editor configs
+.vscode/
+.idea/
+
+# Node modules (users install their own)
+node_modules/
+
+# CI / test
+.github/
+*.test.js
+*.spec.js
+coverage/
