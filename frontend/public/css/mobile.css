@@ -1,0 +1,502 @@
+/* =================================================================
+   ORINIDE — MOBILE CSS  (portrait + landscape + fullscreen)
+   Loaded last — overrides desktop defaults.
+   ================================================================= */
+
+/* ---------------------------------------------------------------
+   0. CRISP TEXT — kills hazy/blurry rendering on mobile
+--------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+  html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+}
+
+/* ---------------------------------------------------------------
+   1. FULLSCREEN BUTTON — visible on ALL screen sizes
+--------------------------------------------------------------- */
+#btn-fullscreen {
+  display: flex !important;
+  width: 28px; height: 28px;
+  border-radius: 5px;
+  border: 1px solid var(--bd);
+  background: var(--bg2);
+  color: var(--tx1);
+  cursor: pointer;
+  align-items: center; justify-content: center;
+  transition: background .12s, border-color .12s, color .12s;
+  flex-shrink: 0;
+}
+#btn-fullscreen:hover { background: var(--bg3); border-color: var(--ac); color: var(--ac3); }
+:fullscreen #btn-fullscreen,
+:-webkit-full-screen #btn-fullscreen,
+:-moz-full-screen #btn-fullscreen,
+.is-fullscreen #btn-fullscreen {
+  border-color: var(--ac);
+  color: var(--ac3);
+  background: rgba(108,43,217,0.1);
+}
+
+/* ---------------------------------------------------------------
+   2. PORTRAIT MODE  (≤ 768px, portrait)
+      — Tab-based single-panel layout
+--------------------------------------------------------------- */
+@media (max-width: 768px) and (orientation: portrait) {
+  html, body { font-size: 12px; }
+
+  /* Topbar — compact, model + run only on right */
+  .topbar { height: 38px; min-height: 38px; max-height: 38px; padding: 0 8px; }
+  /* Hide absolute-positioned center logo in portrait — it overlaps tb-right */
+  .tb-center { display: none !important; }
+  .tb-left { gap: 4px; }
+  #btn-sidebar-toggle { display: none !important; }
+  .tb-project-btn { padding: 3px 7px; font-size: 11px; max-width: 110px; border-radius: 4px; gap: 3px; }
+  #tb-project-name { max-width: 65px; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tb-logo { font-size: 11px; letter-spacing: .3px; }
+  .tb-right { display: flex !important; align-items: center; gap: 3px; }
+  /* Hide everything except model-picker-wrap, btn-run, btn-fullscreen on portrait */
+  .tb-right > *:not(#model-picker-wrap):not(#btn-run):not(#btn-fullscreen) { display: none !important; }
+  #model-picker-wrap { display: flex !important; }
+  #btn-run { display: flex !important; width: 26px !important; height: 26px !important; border-radius: 4px !important; background: var(--ac) !important; color: #fff !important; border: none !important; }
+  #btn-run svg { width: 10px !important; height: 10px !important; }
+  #btn-fullscreen { width: 26px !important; height: 26px !important; }
+  #btn-fullscreen svg { width: 12px !important; height: 12px !important; }
+  #mob-fab { display: flex !important; }
+
+  /* Chrome-style horizontal tab bar */
+  .mob-tabs {
+    display: flex !important; flex-direction: row; align-items: stretch;
+    height: 34px; background: var(--bg1); border-bottom: 1px solid var(--bd); flex-shrink: 0;
+  }
+  .mob-tab {
+    flex: 1; display: flex; flex-direction: row; align-items: center; justify-content: center;
+    gap: 4px; padding: 0 2px; border: none; border-bottom: 2px solid transparent;
+    margin-bottom: -1px; background: transparent; color: var(--tx2);
+    font-size: 10px; font-weight: 600; font-family: var(--font); letter-spacing: .1px;
+    cursor: pointer; transition: color .14s, border-color .14s, background .14s; white-space: nowrap;
+  }
+  .mob-tab svg { width: 12px; height: 12px; flex-shrink: 0; }
+  .mob-tab.active { color: var(--ac3); border-bottom-color: var(--ac3); background: rgba(180,92,255,.07); }
+  .mob-tab + .mob-tab { border-left: 1px solid var(--bd); }
+
+  /* Workspace — full screen layers */
+  .workspace { flex: 1; position: relative; overflow: hidden; min-height: 0; }
+  .sidebar, .center, .chat-panel { position: absolute; inset: 0; display: none; flex-direction: column; overflow: hidden; }
+  .sidebar.active, .center.active, .chat-panel.active { display: flex; }
+  .rz { display: none !important; }
+  :root { --sidebar-w: 100%; --chat-w: 100%; }
+
+  /* Sidebar */
+  .sb-header { height: 36px !important; padding: 0 8px 0 12px !important; }
+  .sb-title { font-size: 10px !important; letter-spacing: .8px !important; }
+  .sb-search { padding: 5px 8px !important; }
+  .sb-search-input { font-size: 13px !important; padding: 6px 8px !important; border-radius: 4px !important; }
+  .ti { min-height: 32px !important; font-size: 12px !important; }
+  .ti-icon { font-size: 9px !important; width: 24px !important; }
+  .ti-act { width: 22px !important; height: 22px !important; }
+  .ti-actions { display: flex !important; }
+  .proj-item { padding: 8px 12px !important; font-size: 12px !important; }
+  .proj-del { opacity: 1 !important; }
+  .sb-section-header { padding: 5px 12px !important; font-size: 9px !important; }
+
+  /* Editor */
+  .tab-bar { height: 34px !important; }
+  .tab { min-width: 72px !important; max-width: 110px !important; font-size: 11px !important; padding: 0 10px !important; }
+  .tab-x { opacity: 1 !important; width: 13px !important; height: 13px !important; }
+  .status-bar { height: 20px !important; font-size: 9px !important; padding: 0 8px !important; gap: 6px !important; }
+  .welcome { padding: 16px 14px !important; }
+  .welcome-logo { font-size: 28px !important; }
+  .welcome-title { font-size: 14px !important; }
+  .welcome-sub { font-size: 11px !important; }
+  .w-btn { padding: 8px 10px !important; font-size: 11px !important; }
+
+  /* Terminal */
+  .terminal-wrap { height: 100% !important; min-height: unset !important; max-height: unset !important; border-top: none !important; }
+  .term-header { height: 34px !important; }
+  .term-tab { padding: 0 12px !important; font-size: 10px !important; }
+  .term-input-row { padding: 6px 10px !important; gap: 6px !important; }
+  .term-prompt { font-size: 12px !important; }
+  .term-input { font-size: 13px !important; }
+  #term-lines { padding: 6px 10px !important; }
+  .tl { font-size: 11px !important; line-height: 1.6 !important; }
+
+  /* Chat */
+  .chat-panel { width: 100% !important; max-width: 100% !important; min-width: 0 !important; border-left: none !important; }
+  .chat-header { height: 36px !important; padding: 0 8px 0 12px !important; }
+  .chat-title { font-size: 10px !important; letter-spacing: .8px !important; }
+  .model-badge { font-size: 9px !important; padding: 2px 7px !important; max-width: 100px !important; }
+  .chat-mode-bar { padding: 4px 8px !important; }
+  .cmode-btn { padding: 5px 4px !important; font-size: 10px !important; }
+  .chat-messages { padding: 10px !important; gap: 10px !important; -webkit-overflow-scrolling: touch; }
+  .msg-avatar { width: 22px !important; height: 22px !important; font-size: 9px !important; border-radius: 4px !important; }
+  .msg-body { font-size: 12px !important; line-height: 1.6 !important; }
+  .msg-body code { font-size: 11px !important; }
+  .msg-body pre code { font-size: 11px !important; padding: 8px !important; }
+  .chat-input-wrap { padding: 8px !important; }
+  .chat-modes { gap: 3px !important; margin-bottom: 6px !important; }
+  .mode-btn { padding: 5px 3px !important; font-size: 9.5px !important; }
+  .chat-row { gap: 5px !important; }
+  .chat-input { font-size: 13px !important; padding: 8px 10px !important; max-height: 90px !important; border-radius: 6px !important; }
+  .send-btn { width: 36px !important; height: 36px !important; border-radius: 6px !important; }
+  .send-btn svg { width: 14px !important; height: 14px !important; }
+  .chat-hints { gap: 4px !important; margin-top: 5px !important; }
+  .hint, button.hint { font-size: 10px !important; padding: 3px 7px !important; }
+  .apply-bar { padding: 7px 8px !important; }
+  .apply-btn { padding: 7px 10px !important; font-size: 11px !important; }
+  .chat-toolbar { display: none !important; }
+
+  /* Attach button */
+  .attach-btn { width: 34px !important; height: 34px !important; border-radius: 5px !important; }
+
+  /* Chat row — ensure send/attach don't overlap FAB */
+  .chat-input-wrap { padding: 8px 8px 8px 8px !important; }
+  .chat-row { gap: 5px !important; padding-right: 0 !important; }
+  .chat-input { font-size: 13px !important; padding: 8px 10px !important; max-height: 90px !important; border-radius: 6px !important; }
+  .send-btn { width: 34px !important; height: 34px !important; border-radius: 6px !important; flex-shrink: 0 !important; }
+  .send-btn svg { width: 14px !important; height: 14px !important; }
+  /* Push toasts and FAB above the chat input area on portrait */
+  #mob-fab { bottom: 72px !important; right: 12px !important; }
+  #toasts  { bottom: 72px !important; right: 10px !important; left: 10px !important; }
+
+  /* Modals — bottom sheet */
+  .modal-bg { padding: 0 !important; align-items: flex-end !important; }
+  .modal-box { max-width: 100% !important; width: 100% !important; max-height: 88vh !important; border-radius: 12px 12px 0 0 !important; margin-bottom: 0 !important; }
+  .modal-box.preview-box { width: 100% !important; height: 90vh !important; border-radius: 12px 12px 0 0 !important; }
+  .modal-head { padding: 12px 14px 10px !important; font-size: 13px !important; }
+  .modal-body { padding: 12px 14px !important; }
+  .cmd-bg { padding: 0 !important; align-items: flex-end !important; }
+  .cmd-box { width: 100% !important; border-radius: 12px 12px 0 0 !important; max-height: 65vh; display: flex; flex-direction: column; }
+  .cmd-input { font-size: 14px !important; padding: 12px !important; }
+  .cmd-list { max-height: 45vh !important; }
+  .cmd-row { padding: 10px 14px !important; font-size: 12px !important; }
+  .ctx-item { padding: 10px 14px !important; font-size: 12px !important; }
+
+  /* Toasts */
+  #toasts { bottom: 10px; right: 10px; left: 10px; }
+  .toast { max-width: 100%; font-size: 11px; padding: 7px 11px; }
+
+  /* FAB */
+  #mob-fab { bottom: 14px; right: 12px; }
+  #mob-fab-btn { width: 42px; height: 42px; font-size: 18px; }
+  .fab-item { font-size: 11px; padding: 6px 12px 6px 9px; gap: 7px; }
+  .fab-item svg { width: 13px; height: 13px; }
+}
+
+/* ---------------------------------------------------------------
+   3. LANDSCAPE MODE  (≤ 1024px, landscape)
+      — PC-style side-by-side layout, topbar shows all key buttons
+--------------------------------------------------------------- */
+@media (max-width: 1024px) and (orientation: landscape) {
+
+  /* Show desktop-style workspace — NO tab switching */
+  .mob-tabs { display: none !important; }
+  #mob-fab  { display: none !important; }
+  /* Reset panel CSS vars to landscape-safe defaults */
+  :root { --chat-w: 220px; --sidebar-w: 185px; }
+
+  /* Restore panels to side-by-side desktop layout */
+  .workspace {
+    display: flex !important;
+    flex-direction: row !important;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    min-height: 0;
+  }
+  .sidebar {
+    display: flex !important;
+    position: relative !important; inset: unset !important;
+    width: var(--sidebar-w, 185px) !important;
+    min-width: 140px !important;
+    max-width: 40vw !important;
+    flex-shrink: 0;
+  }
+  .sidebar.collapsed { width: 0 !important; min-width: 0 !important; }
+  .center {
+    display: flex !important;
+    position: relative !important; inset: unset !important;
+    flex: 1 !important; min-width: 0;
+    flex-direction: column;
+  }
+  .chat-panel {
+    display: flex !important;
+    position: relative !important; inset: unset !important;
+    width: var(--chat-w, 220px) !important;
+    min-width: 160px !important;
+    max-width: 50vw !important;
+    flex-shrink: 0;
+    border-left: 1px solid var(--bd) !important;
+  }
+
+  /* Resize handles — visible, touch-friendly in landscape */
+  .rz { display: block !important; z-index: 50; }
+  .rz-e {
+    position: absolute; top: 0; right: 0;
+    width: 10px; height: 100%; cursor: col-resize;
+    background: transparent; transition: background .15s;
+    touch-action: none;
+  }
+  .rz-w {
+    width: 10px; cursor: col-resize; flex-shrink: 0;
+    background: transparent; transition: background .15s;
+    touch-action: none;
+  }
+  .rz-n {
+    height: 10px; cursor: row-resize; flex-shrink: 0;
+    background: transparent; transition: background .15s;
+    touch-action: none;
+  }
+  .rz:hover, .rz.drag { background: var(--ac) !important; }
+
+  /* Chat input — strictly compact so messages stay visible */
+  .chat-input-wrap { padding: 5px 6px !important; flex-shrink: 0; }
+  .chat-modes { display: none !important; } /* hide mode buttons — use landscape space for messages */
+  .chat-input {
+    font-size: 12px !important;
+    padding: 5px 7px !important;
+    max-height: 52px !important;
+    min-height: 30px !important;
+    border-radius: 5px !important;
+    line-height: 1.4 !important;
+  }
+  .chat-row { gap: 4px !important; }
+  .send-btn { width: 30px !important; height: 30px !important; border-radius: 5px !important; flex-shrink: 0; }
+  .send-btn svg { width: 12px !important; height: 12px !important; }
+  .attach-btn { width: 28px !important; height: 28px !important; border-radius: 4px !important; }
+  .attach-btn svg { width: 12px !important; height: 12px !important; }
+  .chat-hints { display: none !important; }
+  .apply-bar { padding: 4px 6px !important; }
+  .apply-btn { padding: 4px 7px !important; font-size: 10px !important; }
+  .chat-toolbar { display: none !important; }
+  /* Mode bar — single compact row instead of hidden */
+  .chat-mode-bar { padding: 3px 5px !important; gap: 2px !important; }
+  .cmode-btn { padding: 3px 4px !important; font-size: 9px !important; }
+  #btn-toggle-terminal-chat { padding: 3px 6px !important; font-size: 9px !important; }
+  .terminal-wrap {
+    height: 180px !important;
+    min-height: 80px !important;
+    max-height: 55vh !important;
+    border-top: 1px solid var(--bd) !important;
+  }
+
+  /* Topbar — compact for landscape height, prevent center overlap */
+  .topbar {
+    height: 36px; min-height: 36px; max-height: 36px;
+    padding: 0 8px;
+    justify-content: space-between;
+  }
+  /* Remove absolute centering of logo in landscape — it overlaps buttons */
+  .tb-center {
+    display: none !important;
+  }
+  .tb-logo { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tb-left { flex-shrink: 1; min-width: 0; gap: 3px; }
+  .tb-project-btn { padding: 3px 6px; font-size: 10px; max-width: 100px; flex-shrink: 1; }
+  #tb-project-name { max-width: 60px; }
+  .tb-btn { width: 26px !important; height: 26px !important; flex-shrink: 0; }
+  .tb-btn svg { width: 12px !important; height: 12px !important; }
+
+  /* Show topbar right buttons — curated set to prevent overflow */
+  .tb-right {
+    display: flex !important;
+    gap: 2px;
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+  /* Hide non-essential buttons in landscape to prevent overflow */
+  .tb-right > *:not(#model-picker-wrap):not(#btn-run):not(#btn-preview):not(#btn-fullscreen):not(#btn-sidebar-toggle) {
+    display: none !important;
+  }
+  #model-picker-wrap { display: flex !important; }
+  #btn-run { display: flex !important; background: var(--ac) !important; color: #fff !important; border: none !important; }
+  #btn-preview { display: flex !important; }
+  #btn-sidebar-toggle { display: flex !important; }
+  #btn-fullscreen { display: flex !important; }
+
+  /* Sidebar internals — tighter for landscape height */
+  .sb-header { height: 30px !important; padding: 0 6px 0 10px !important; }
+  .sb-title { font-size: 9px !important; }
+  .sb-search { padding: 4px 6px !important; }
+  .sb-search-input { font-size: 12px !important; padding: 4px 6px !important; }
+  .ti { min-height: 28px !important; font-size: 11px !important; }
+  .ti-icon { width: 22px !important; font-size: 9px !important; }
+  .proj-item { padding: 5px 10px !important; font-size: 11px !important; }
+
+  /* Editor tabs — tighter */
+  .tab-bar { height: 32px !important; }
+  .tab { min-width: 72px !important; max-width: 120px !important; font-size: 11px !important; padding: 0 10px !important; }
+  .status-bar { height: 18px !important; font-size: 9px !important; padding: 0 8px !important; }
+
+  /* Terminal */
+  .term-header { height: 30px !important; }
+  .term-tab { padding: 0 10px !important; font-size: 10px !important; }
+  .term-input-row { padding: 5px 8px !important; }
+  .term-input { font-size: 12px !important; }
+  #term-lines { padding: 5px 8px !important; }
+  .tl { font-size: 11px !important; }
+
+  /* Chat — narrower column */
+  /* chat-panel width controlled by --chat-w CSS var set in landscape block above */
+  .chat-header { height: 32px !important; padding: 0 6px 0 10px !important; }
+  .chat-title { font-size: 10px !important; }
+  .model-badge { font-size: 9px !important; padding: 2px 6px !important; max-width: 90px !important; }
+  .chat-mode-bar { padding: 3px 6px !important; }
+  .cmode-btn { padding: 4px 3px !important; font-size: 9px !important; }
+  .chat-messages { padding: 7px !important; gap: 7px !important; }
+  .msg-avatar { width: 20px !important; height: 20px !important; font-size: 8px !important; }
+  .msg-body { font-size: 11px !important; line-height: 1.55 !important; }
+  .msg-body pre code { font-size: 10px !important; padding: 6px !important; }
+  .chat-input-wrap { padding: 6px !important; }
+  .chat-modes { gap: 2px !important; margin-bottom: 4px !important; }
+  .mode-btn { padding: 4px 2px !important; font-size: 9px !important; }
+  .chat-row { gap: 4px !important; }
+  .chat-input { font-size: 12px !important; padding: 6px 8px !important; max-height: 70px !important; }
+  .send-btn { width: 30px !important; height: 30px !important; }
+  .send-btn svg { width: 12px !important; height: 12px !important; }
+  .chat-hints { display: none !important; }
+  .apply-btn { padding: 5px 8px !important; font-size: 10px !important; }
+  .chat-toolbar { display: none !important; }
+
+  /* Attach btn */
+  .attach-btn { width: 30px !important; height: 30px !important; }
+}
+
+/* ---------------------------------------------------------------
+   4. SAFE AREA — notched phones / home-indicator
+--------------------------------------------------------------- */
+@supports (padding: env(safe-area-inset-bottom)) {
+  @media (max-width: 768px) and (orientation: portrait) {
+    #mob-fab   { bottom: calc(12px + env(safe-area-inset-bottom)); }
+    #toasts    { bottom: calc(10px + env(safe-area-inset-bottom)); }
+    .chat-input-wrap { padding-bottom: calc(8px + env(safe-area-inset-bottom)) !important; }
+    .term-input-row  { padding-bottom: calc(6px + env(safe-area-inset-bottom)) !important; }
+    .mob-tabs  { padding-bottom: env(safe-area-inset-bottom); }
+  }
+}
+
+/* ---------------------------------------------------------------
+   5. DESKTOP — guarantee nothing leaks to large screens
+--------------------------------------------------------------- */
+@media (min-width: 769px) and (orientation: portrait) {
+  /* Rare case: tall desktop portrait — restore desktop layout */
+  .mob-tabs { display: none !important; }
+  #mob-fab  { display: none !important; }
+  .sidebar, .center, .chat-panel { position: relative !important; display: flex !important; inset: unset !important; }
+}
+
+/* ---------------------------------------------------------------
+   6. FAB — portrait only, draggable (position set by JS)
+--------------------------------------------------------------- */
+@media (max-width: 768px) and (orientation: portrait) {
+  #mob-fab {
+    position: fixed;
+    z-index: 5000;
+    display: flex; flex-direction: column-reverse; align-items: flex-end; gap: 8px;
+    /* default position — overridden by JS drag */
+    bottom: 72px; right: 12px;
+    touch-action: none; /* allow pointer events for drag */
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  #mob-fab.dragging { transition: none !important; opacity: .85; }
+  #mob-fab-btn {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--ac); color: #fff; border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: grab; box-shadow: 0 3px 14px rgba(108,43,217,.5);
+    transition: background .15s, transform .2s;
+    /* drag handle indicator */
+    position: relative;
+  }
+  /* Small drag dots on button */
+  #mob-fab-btn::before {
+    content: '';
+    position: absolute; top: 5px; right: 5px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    pointer-events: none;
+  }
+  #mob-fab-btn svg { width: 16px; height: 16px; }
+  #mob-fab-btn.open { background: var(--ac2); }
+  #mob-fab-menu { display: none; flex-direction: column; gap: 6px; align-items: flex-end; }
+  #mob-fab-menu.visible { display: flex; animation: fabIn .15s ease; }
+  @keyframes fabIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .fab-item {
+    display: flex; align-items: center; gap: 7px;
+    background: var(--bg2); border: 1px solid var(--bd2);
+    border-radius: 99px; padding: 6px 12px 6px 9px;
+    cursor: pointer; color: var(--tx0); font-size: 11px;
+    font-weight: 500; font-family: var(--font);
+    box-shadow: 0 2px 8px rgba(0,0,0,.4);
+    transition: background .12s, border-color .12s; white-space: nowrap;
+  }
+  .fab-item:active { background: var(--bg3); border-color: var(--ac); }
+  .fab-item svg { color: var(--ac3); flex-shrink: 0; width: 13px; height: 13px; }
+}
+
+/* ---------------------------------------------------------------
+   7. MODEL PICKER — mobile responsive
+--------------------------------------------------------------- */
+
+/* Portrait: compact button, dropdown anchors to left edge of screen */
+@media (max-width: 768px) and (orientation: portrait) {
+  .model-picker-btn {
+    height: 26px !important; padding: 0 6px !important;
+    font-size: 10px !important; max-width: 82px !important; min-width: 60px !important;
+    gap: 3px !important;
+  }
+  #model-picker-label { max-width: 54px !important; }
+  .model-picker-dropdown {
+    /* In portrait, open from right edge, clamp to viewport */
+    right: 0 !important; left: auto !important;
+    width: calc(100vw - 16px) !important;
+    max-width: 340px !important;
+    max-height: 70vh !important;
+  }
+}
+
+/* Landscape: slightly tighter than desktop */
+@media (max-width: 1024px) and (orientation: landscape) {
+  .model-picker-btn {
+    height: 26px !important; padding: 0 6px !important;
+    font-size: 10px !important; max-width: 90px !important; min-width: 64px !important;
+  }
+  #model-picker-label { max-width: 64px !important; }
+  .model-picker-dropdown {
+    width: 260px !important;
+    max-height: 80vh !important;
+    /* Don't overflow viewport on right */
+    right: 0 !important;
+  }
+  .mpd-list { max-height: 160px !important; }
+}
+
+/* Very narrow screens (< 360px) */
+@media (max-width: 360px) {
+  .model-picker-btn { max-width: 68px !important; }
+  #model-picker-label { max-width: 42px !important; font-size: 9px !important; }
+}
+
+/* Settings model field — mobile */
+@media (max-width: 768px) {
+  .s-model-presets { gap: 4px !important; }
+  .s-preset { font-size: 10px !important; padding: 3px 7px !important; }
+  .s-model-apply-btn { padding: 6px 9px !important; font-size: 11px !important; }
+}
+
+/* ======= STARTUP PANEL MOBILE ======= */
+@media (max-width: 768px) {
+  .startup-inner { padding: 28px 20px; }
+  .startup-title { font-size: 17px; }
+  .startup-btn { font-size: 12px; padding: 10px 16px; }
+  .diff-box { width: 100vw; max-width: 100vw; border-radius: 0; }
+  .diff-split-view { flex-direction: column; }
+  .diff-split-pane + .diff-split-pane { border-left: none; border-top: 2px solid var(--bd2); }
+  .diff-view-toggle .dvt-btn:first-child { display: none; } /* hide split on mobile */
+  .git-panel { margin: 4px 6px; }
+  .chat-image-upload-bar { padding: 5px 8px 3px; }
+}
