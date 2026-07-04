@@ -1,0 +1,64 @@
+{
+  "name": "orin-ide",
+  "version": "1.0.8",
+  "description": "AI-powered browser-based coding environment with terminal, file system, multi-model AI chat, diff viewer, HTML preview, free image API, snippet palette, and project-wide find & replace.",
+  "author": "Nandan Das <nandandas2407@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/nandandas2407-web/orin-ide#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nandandas2407-web/orin-ide.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nandandas2407-web/orin-ide/issues"
+  },
+  "keywords": [
+    "ide",
+    "browser-ide",
+    "ai",
+    "coding",
+    "editor",
+    "openrouter",
+    "terminal",
+    "web-ide",
+    "deepseek",
+    "monaco",
+    "code-editor",
+    "html-preview",
+    "image-api",
+    "portfolio-generator",
+    "diff-viewer"
+  ],
+  "main": "backend/server.js",
+  "bin": {
+    "orin-ide": "./bin/orin-ide.js"
+  },
+  "scripts": {
+    "start": "node backend/server.js",
+    "setup": "bash setup.sh",
+    "postinstall": "node bin/postinstall.js"
+  },
+  "dependencies": {
+    "archiver": "^8.0.0",
+    "body-parser": "^2.2.2",
+    "chokidar": "^5.0.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "mime-types": "^3.0.2",
+    "multer": "^2.1.1",
+    "unzipper": "^0.12.3",
+    "ws": "^8.21.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "bin/",
+    "backend/",
+    "frontend/",
+    "README.md",
+    "LICENSE",
+    "setup.sh",
+    "start.sh"
+  ]
+}

@@ -1,0 +1,2000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>OrinIDE</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="vendor/xterm/xterm.min.css">
+<link rel="stylesheet" href="vendor/fonts/fonts.css">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/editor.css">
+<link rel="stylesheet" href="css/terminal.css">
+<link rel="stylesheet" href="css/chat.css">
+<link rel="stylesheet" href="css/modals.css">
+<link rel="stylesheet" href="css/mobile.css">
+<link rel="stylesheet" href="css/agents.css">
+  <link rel="stylesheet" href="css/overrides.css">
+<link rel="stylesheet" href="css/glass-clay.css">
+</head>
+<body>
+
+<!-- STARTUP PANEL (one-time) -->
+<div id="startup-panel" class="startup-panel hidden">
+  <div class="startup-inner">
+    <div class="startup-logo">
+      <svg width="44" height="44" viewBox="0 0 1254 1254" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="OrinIDE">
+        <defs>
+          <linearGradient id="sg-ring" x1="280" y1="220" x2="1040" y2="760" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#9D5CFF"/><stop offset="0.42" stop-color="#7C3AED"/>
+            <stop offset="0.75" stop-color="#3B2173"/><stop offset="1" stop-color="#160B2E"/>
+          </linearGradient>
+          <linearGradient id="sg-bar" x1="745" y1="845" x2="1080" y2="940" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#9D5CFF"/><stop offset="1" stop-color="#7C3AED"/>
+          </linearGradient>
+        </defs>
+        <path d="M600 213 A 410 410 0 1 1 248 822" fill="none" stroke="url(#sg-ring)" stroke-width="90" stroke-linecap="round"/>
+        <path d="M458 432 L790 637 L458 842 L458 706 L600 637 L458 568 Z" fill="#F8F6FF"/>
+        <rect x="752" y="848" width="234" height="90" rx="12" fill="url(#sg-bar)"/>
+      </svg>
+    </div>
+    <div class="startup-title">Welcome to <span>OrinIDE</span></div>
+    <div class="startup-sub">AI-Powered Browser IDE by Nandan Das</div>
+    <div class="startup-actions">
+      <button class="startup-btn primary" onclick="StartupPanel.openRequest()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Request / Feedback
+      </button>
+      <button class="startup-btn secondary" onclick="StartupPanel.openCLIDocs()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+        Check CLI Docs
+      </button>
+    </div>
+    <label class="startup-dont-show">
+      <input type="checkbox" id="startup-dont-show">
+      <span>Don't show again</span>
+    </label>
+    <button class="startup-close" onclick="StartupPanel.close()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- SPLASH -->
+<div id="splash" class="splash">
+  <div class="splash-inner">
+    <div class="splash-logo">
+    <svg width="64" height="64" viewBox="0 0 1254 1254" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="OrinIDE">
+      <defs>
+        <linearGradient id="pl-ring" x1="280" y1="220" x2="1040" y2="760" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#9D5CFF"/><stop offset="0.42" stop-color="#7C3AED"/>
+          <stop offset="0.75" stop-color="#3B2173"/><stop offset="1" stop-color="#160B2E"/>
+        </linearGradient>
+        <linearGradient id="pl-bar" x1="745" y1="845" x2="1080" y2="940" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#9D5CFF"/><stop offset="1" stop-color="#7C3AED"/>
+        </linearGradient>
+      </defs>
+      <path d="M600 213 A 410 410 0 1 1 248 822" fill="none" stroke="url(#pl-ring)" stroke-width="90" stroke-linecap="round"/>
+      <path d="M458 432 L790 637 L458 842 L458 706 L600 637 L458 568 Z" fill="#F8F6FF"/>
+      <rect x="752" y="848" width="234" height="90" rx="12" fill="url(#pl-bar)"/>
+    </svg>
+  </div>
+    <div class="splash-name">OrinIDE</div>
+    <div class="splash-sub">AI-Powered Coding Environment</div>
+    <div class="splash-bar-wrap"><div class="splash-bar"></div></div>
+  </div>
+</div>
+
+<!-- APP ROOT -->
+<div id="app" class="app hidden">
+
+  <!-- ===== MOBILE TOPBAR (hidden on desktop) ===== -->
+  <div class="mob-topbar" id="mob-topbar">
+    <div class="mt-left">
+      <span class="mt-logo">
+        <svg width="20" height="20" viewBox="0 0 1254 1254" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="OrinIDE">
+          <defs>
+            <linearGradient id="mt-ring" x1="280" y1="220" x2="1040" y2="760" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#9D5CFF"/><stop offset="0.42" stop-color="#7C3AED"/>
+              <stop offset="0.75" stop-color="#3B2173"/><stop offset="1" stop-color="#160B2E"/>
+            </linearGradient>
+            <linearGradient id="mt-bar" x1="745" y1="845" x2="1080" y2="940" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#9D5CFF"/><stop offset="1" stop-color="#7C3AED"/>
+            </linearGradient>
+          </defs>
+          <path d="M600 213 A 410 410 0 1 1 248 822" fill="none" stroke="url(#mt-ring)" stroke-width="90" stroke-linecap="round"/>
+          <path d="M458 432 L790 637 L458 842 L458 706 L600 637 L458 568 Z" fill="#F8F6FF"/>
+          <rect x="752" y="848" width="234" height="90" rx="12" fill="url(#mt-bar)"/>
+        </svg>
+      </span>
+      <span class="mt-project" id="tb-project-name">OrinIDE</span>
+    </div>
+    <div class="mt-right">
+      <button class="model-picker-btn" id="model-picker-btn" title="Select AI Model">
+        <span id="model-picker-label">GPT-OSS-120B</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <button class="ib sm" id="btn-run" title="Run Project">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </button>
+      <button class="ib sm" id="btn-mob-settings" title="Settings" onclick="SettingsMgr.load();openModal('settings-modal')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== ACTIVITY BAR (far left) ===== -->
+  <nav class="activity-bar" id="activity-bar">
+    <div class="ab-top">
+      <div class="ab-logo" title="OrinIDE">
+        <svg width="20" height="20" viewBox="0 0 1254 1254" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="OrinIDE">
+          <defs>
+            <linearGradient id="ab-ring" x1="280" y1="220" x2="1040" y2="760" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#9D5CFF"/><stop offset="0.42" stop-color="#7C3AED"/>
+              <stop offset="0.75" stop-color="#3B2173"/><stop offset="1" stop-color="#160B2E"/>
+            </linearGradient>
+            <linearGradient id="ab-bar" x1="745" y1="845" x2="1080" y2="940" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#9D5CFF"/><stop offset="1" stop-color="#7C3AED"/>
+            </linearGradient>
+          </defs>
+          <path d="M600 213 A 410 410 0 1 1 248 822" fill="none" stroke="url(#ab-ring)" stroke-width="90" stroke-linecap="round"/>
+          <path d="M458 432 L790 637 L458 842 L458 706 L600 637 L458 568 Z" fill="#F8F6FF"/>
+          <rect x="752" y="848" width="234" height="90" rx="12" fill="url(#ab-bar)"/>
+        </svg>
+      </div>
+      <button class="ab-btn" data-view="explorer" title="Explorer (Ctrl+Shift+E)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      </button>
+      <button class="ab-btn" data-view="search" title="Search (Ctrl+Shift+F)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <button class="ab-btn" data-view="git" title="Source Control (Ctrl+Shift+G)">
+        <svg width="18" height="18" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="6" y1="9" x2="6" y2="15"/><path d="M13 6h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3"/><polyline points="15 12 13 10 11 12"/><polyline points="15 12 13 14 11 12"/></svg>
+      </button>
+      <button class="ab-btn" data-view="ai" title="AI Chat (Ctrl+L)" onclick="ActivityBar.toggleAI()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </button>
+      <button class="ab-btn" id="ab-terminal" title="Terminal (Ctrl+`)" onclick="ActivityBar.toggleTerminal()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+      </button>
+      <div class="ab-sep"></div>
+      <button class="ab-btn" data-view="agents" title="AI Agents (Ctrl+Shift+A)" onclick="ActivityBar.toggleAgents()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M12 11V7"/><circle cx="12" cy="5" r="2"/><path d="M7 15h.01M12 15h.01M17 15h.01"/></svg>
+      </button>
+      <div class="ab-sep"></div>
+      <button class="ab-btn" id="ab-features" title="Feature Hub — all tools in one place" onclick="FeatureHub.toggle()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      </button>
+    </div>
+    <div class="ab-bottom">
+      <button class="ab-btn" id="ab-model-picker" title="Select AI Model" onclick="ModelPicker.toggle(this)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </button>
+      <div class="ab-sep"></div>
+      <button class="ab-btn" id="ab-ollama" data-view="ollama" title="Ollama Local AI" onclick="OllamaPanel.toggle()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </button>
+      <button class="ab-btn" id="ab-settings" title="Settings" onclick="SettingsMgr.load();openModal('settings-modal')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== LAYOUT MAIN (sidebar + center + ai-panels) ===== -->
+  <div class="layout-main" id="layout-main" data-sidebar-pos="left" data-chat-pos="right">
+
+    <!-- SIDEBAR (Explorer / Search / Git / Extensions / AI / Agents) -->
+    <aside class="sidebar" id="sidebar" data-view="explorer">
+      <div class="rz rz-e" id="rz-sidebar"></div>
+
+      <div class="sb-header">
+        <span class="sb-title">EXPLORER</span>
+        <div class="sb-actions">
+          <button class="ib sm" id="btn-new-file" title="New File">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          </button>
+          <button class="ib sm" id="btn-new-folder" title="New Folder">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+          </button>
+          <button class="ib sm" id="btn-import-asset-sidebar" title="Import image / asset into project">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </button>
+          <button class="ib sm" id="btn-refresh-tree" title="Refresh">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </button>
+          <div class="sbpos-quick-wrap">
+            <button class="ib sm" id="btn-sidebar-pos" title="Move Sidebar">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+            </button>
+            <div class="sbpos-quick-menu hidden" id="sbpos-quick-menu">
+              <button data-pos="left" type="button">
+                <svg width="16" height="13" viewBox="0 0 28 22" fill="none"><rect x="0.5" y="0.5" width="27" height="21" rx="2.5" stroke="currentColor" stroke-width="1.2"/><rect x="2" y="2" width="8" height="18" rx="1" fill="currentColor"/></svg>
+                Left
+              </button>
+              <button data-pos="right" type="button">
+                <svg width="16" height="13" viewBox="0 0 28 22" fill="none"><rect x="0.5" y="0.5" width="27" height="21" rx="2.5" stroke="currentColor" stroke-width="1.2"/><rect x="18" y="2" width="8" height="18" rx="1" fill="currentColor"/></svg>
+                Right
+              </button>
+              <button data-pos="top" type="button">
+                <svg width="16" height="13" viewBox="0 0 28 22" fill="none"><rect x="0.5" y="0.5" width="27" height="21" rx="2.5" stroke="currentColor" stroke-width="1.2"/><rect x="2" y="2" width="24" height="6" rx="1" fill="currentColor"/></svg>
+                Top
+              </button>
+              <button data-pos="bottom" type="button">
+                <svg width="16" height="13" viewBox="0 0 28 22" fill="none"><rect x="0.5" y="0.5" width="27" height="21" rx="2.5" stroke="currentColor" stroke-width="1.2"/><rect x="2" y="14" width="24" height="6" rx="1" fill="currentColor"/></svg>
+                Bottom
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Projects section -->
+      <div class="sb-section" id="projects-section">
+        <div class="sb-section-header">
+          <span>PROJECTS</span>
+          <div style="display:flex;gap:2px;align-items:center">
+            <button class="ib sm" id="btn-zip-import-proj" title="Import ZIP as project">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </button>
+            <button class="ib sm" id="btn-new-project" title="New Project">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
+        <div id="project-list"></div>
+      </div>
+
+      <!-- File search -->
+      <div class="sb-search">
+        <input id="file-search" class="sb-search-input" type="text" placeholder="Search files...">
+      </div>
+
+      <!-- File tree -->
+      <div class="file-tree-wrap">
+        <div id="file-tree" class="file-tree">
+          <div class="empty-msg">Open or create a project to start</div>
+        </div>
+      </div>
+
+      <!-- Project path breadcrumb -->
+      <div class="sb-path" id="sb-project-path"></div>
+
+    </aside>
+
+    <!-- ===== SEARCH SIDEBAR VIEW ===== -->
+    <aside class="sidebar sidebar-view hidden" id="sidebar-search" data-view="search">
+      <div class="sb-header">
+        <span class="sb-title">SEARCH</span>
+        <button class="ib sm" onclick="ActivityBar.show('explorer')" title="Back to Explorer">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        </button>
+      </div>
+      <div class="gs-search-box">
+        <div class="gs-input-row">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="sb-search-input" type="text" placeholder="Search across all files..." autocomplete="off" spellcheck="false">
+          <button class="gs-clear-btn hidden" id="sb-search-clear" title="Clear">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="gs-opts-row">
+          <button class="gs-opt-btn" id="gs-opt-case" title="Match Case" data-on="0">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 19l5-12 5 12M4.5 15h7"/><path d="M21 10v9M21 10c0-1.5-1.5-2.5-3-2.5S15 8.5 15 10s1.5 2.5 3 2.5 3 1 3 2.5-1.5 2.5-3 2.5-3-1-3-2.5"/></svg>
+          </button>
+          <button class="gs-opt-btn" id="gs-opt-word" title="Match Whole Word" data-on="0">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="1"/><line x1="3" y1="18" x2="3" y2="20"/><line x1="21" y1="18" x2="21" y2="20"/></svg>
+          </button>
+          <button class="gs-opt-btn" id="gs-opt-regex" title="Use Regular Expression" data-on="0">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4v8M2 6.5l6 3M8 6.5l-6 3"/><line x1="13" y1="16" x2="21" y2="16"/><line x1="13" y1="20" x2="21" y2="20"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="gs-status" id="gs-status"></div>
+      <div id="sb-search-results" class="gs-results"></div>
+    </aside>
+
+    <!-- ===== GIT SIDEBAR VIEW ===== -->
+    <aside class="sidebar sidebar-view hidden" id="sidebar-git" data-view="git">
+      <div class="sb-header">
+        <span class="sb-title">SOURCE CONTROL</span>
+        <div style="display:flex;gap:2px;align-items:center">
+          <button class="ib sm" id="git-btn-refresh" title="Refresh" onclick="GitMgr.refresh()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </button>
+          <button class="ib sm" id="git-btn-init" title="Initialize Repository" onclick="GitMgr.init_repo()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Commit message + stage all + commit -->
+      <div class="git-commit-area" id="git-commit-area">
+        <textarea id="git-commit-msg" class="git-commit-input" placeholder="Commit message (Ctrl+Enter to commit)" rows="2"></textarea>
+        <div class="git-commit-actions">
+          <button class="git-action-btn" id="git-btn-stage-all" onclick="GitMgr.stageAll()" title="Stage all changes">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Stage All
+          </button>
+          <button class="git-action-btn primary" id="git-btn-commit" onclick="GitMgr.commit()" title="Commit staged changes">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><line x1="1.05" y1="12" x2="7" y2="12"/><line x1="17.01" y1="12" x2="22.96" y2="12"/></svg>
+            Commit
+          </button>
+        </div>
+      </div>
+
+      <!-- Branch info + push/pull -->
+      <div class="git-branch-row" id="git-branch-row">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+        <span id="git-branch-name" class="git-branch-name">—</span>
+        <div style="flex:1"></div>
+        <button class="git-icon-btn" id="git-btn-pull" title="Pull" onclick="GitMgr.pull()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+        </button>
+        <button class="git-icon-btn" id="git-btn-push" title="Push" onclick="GitMgr.push()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Status / file list -->
+      <div class="git-status-msg" id="git-status-msg">Open a project to see git status</div>
+      <div class="git-file-list" id="git-file-list"></div>
+    </aside>
+
+    <!-- ===== OLLAMA SIDEBAR VIEW ===== -->
+    <aside class="sidebar sidebar-view hidden" id="sidebar-ollama" data-view="ollama">
+      <div class="sb-header">
+        <span class="sb-title">OLLAMA LOCAL AI</span>
+        <div style="display:flex;gap:2px;align-items:center">
+          <button class="ib sm" id="ollama-btn-refresh" title="Refresh Models" onclick="OllamaPanel.refresh()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div class="ollama-status" id="ollama-status">
+        <div class="ollama-status-dot"></div>
+        <span id="ollama-status-text">Checking Ollama...</span>
+        <button class="ollama-start-btn" id="ollama-start-btn" style="display:none" onclick="OllamaPanel.startOllama()" title="Start Ollama server">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          Start
+        </button>
+      </div>
+
+      <!-- Install Section (shown when Ollama not detected) -->
+      <div class="ollama-install-section" id="ollama-install-section" style="display:none">
+        <div class="ollama-install-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="ollama-install-title">Ollama Not Installed</div>
+        <div class="ollama-install-desc">
+          Ollama lets you run AI models locally on your device.
+          It's free, private, and works offline.
+        </div>
+        <div class="ollama-install-steps">
+          <div class="ollama-step">
+            <span class="ollama-step-num">1</span>
+            <span>Click the button below to install</span>
+          </div>
+          <div class="ollama-step">
+            <span class="ollama-step-num">2</span>
+            <span>Wait for installation to complete</span>
+          </div>
+          <div class="ollama-step">
+            <span class="ollama-step-num">3</span>
+            <span>Pull a model and start using AI</span>
+          </div>
+        </div>
+        <button class="ollama-install-btn" id="ollama-install-btn" onclick="OllamaPanel.installOllama()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Install Ollama
+        </button>
+        <div class="ollama-install-status" id="ollama-install-status"></div>
+        <div class="ollama-install-alt">
+          Or install manually:<br>
+          <code id="ollama-install-cmd">curl -fsSL https://ollama.com/install.sh | sh</code>
+        </div>
+      </div>
+
+      <!-- Install Section (shown when Ollama not detected) -->
+      <div class="ollama-install-section" id="ollama-install-section" style="display:none">
+        <div class="ollama-install-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="ollama-install-title">Ollama Not Installed</div>
+        <div class="ollama-install-desc">
+          Ollama lets you run AI models locally on your device.
+          It's free, private, and works offline.
+        </div>
+        <div class="ollama-install-steps">
+          <div class="ollama-step">
+            <span class="ollama-step-num">1</span>
+            <span>Click the button below to install</span>
+          </div>
+          <div class="ollama-step">
+            <span class="ollama-step-num">2</span>
+            <span>Wait for installation to complete</span>
+          </div>
+          <div class="ollama-step">
+            <span class="ollama-step-num">3</span>
+            <span>Pull a model and start using AI</span>
+          </div>
+        </div>
+        <button class="ollama-install-btn" id="ollama-install-btn" onclick="OllamaPanel.installOllama()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Install Ollama
+        </button>
+        <div class="ollama-install-status" id="ollama-install-status"></div>
+        <div class="ollama-install-alt">
+          Or install manually:<br>
+          <code id="ollama-install-cmd">curl -fsSL https://ollama.com/install.sh | sh</code>
+        </div>
+      </div>
+
+      <!-- Quick Select -->
+      <div class="ollama-quick-select">
+        <div class="ollama-section-title">Active Model</div>
+        <select id="ollama-model-select" class="ollama-model-select" onchange="OllamaPanel.selectModel(this.value)">
+          <option value="">— Select Model —</option>
+        </select>
+        <button class="ollama-apply-btn" onclick="OllamaPanel.applyModel()">Use This Model</button>
+      </div>
+
+      <!-- Installed Models -->
+      <div class="ollama-section">
+        <div class="ollama-section-title">Installed Models</div>
+        <div id="ollama-installed-list" class="ollama-model-list">
+          <div class="ollama-empty">No models installed</div>
+        </div>
+      </div>
+
+      <!-- Recommended for Android -->
+      <div class="ollama-section" id="ollama-recommended-section">
+        <div class="ollama-section-title">Recommended for Android</div>
+        <div id="ollama-recommended-list" class="ollama-model-list"></div>
+      </div>
+
+      <!-- Download Popular Models -->
+      <div class="ollama-section" id="ollama-download-section">
+        <div class="ollama-section-title">Download Popular Models</div>
+        <div id="ollama-download-list" class="ollama-model-list"></div>
+      </div>
+
+      <!-- Pull New Model -->
+      <div class="ollama-section">
+        <div class="ollama-section-title">Pull New Model</div>
+        <div class="ollama-pull-row">
+          <input type="text" id="ollama-pull-input" class="ollama-pull-input" placeholder="model:tag (e.g. phi3:mini)">
+          <button class="ollama-pull-btn" onclick="OllamaPanel.pullModel()">Pull</button>
+        </div>
+        <div class="ollama-pull-status" id="ollama-pull-status"></div>
+      </div>
+    </aside>
+
+    <!-- ===== AI CHAT SIDEBAR VIEW ===== -->
+    <aside class="sidebar sidebar-view hidden" id="sidebar-ai" data-view="ai">
+      <div class="sb-header">
+        <span class="sb-title">AI CHAT</span>
+        <button class="ib sm" onclick="ActivityBar.show('explorer')" title="Back to Explorer">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        </button>
+      </div>
+      <div class="sb-section" style="padding:16px;font-size:11px;color:var(--tx2);text-align:center">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:8px"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        <p>AI Chat opens in the right panel.</p>
+        <p style="margin-top:4px">Use <strong>Ctrl+L</strong> to open/close.</p>
+      </div>
+    </aside>
+
+    <!-- ===== CENTER (editor + bottom panel) ===== -->
+    <div class="center" id="center" data-panel="editor">
+
+      <!-- ===== TOP BAR ===== -->
+      <div class="top-bar" id="top-bar">
+        <div class="tb-left">
+          <span class="tb-item" id="st-git-branch" title="Git Branch">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="6" y1="9" x2="6" y2="15"/><path d="M13 6h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3"/></svg>
+            <span id="st-branch-name">main</span>
+          </span>
+          <span class="tb-item" id="st-errors" title="Errors">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span id="st-error-count">0</span>
+          </span>
+          <span class="tb-item" id="st-warnings" title="Warnings">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span id="st-warning-count">0</span>
+          </span>
+        </div>
+        <div class="tb-right">
+          <span class="tb-item" id="st-ollama" title="Ollama Status" onclick="OllamaPanel.toggle()" style="cursor:pointer">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <span id="st-ollama-status">Ollama</span>
+          </span>
+          <span class="tb-item" id="st-language" title="Language">Plain Text</span>
+          <span class="tb-item" id="st-encoding">UTF-8</span>
+          <span class="tb-item" id="st-cursor-pos">Ln 1, Col 1</span>
+        </div>
+      </div>
+
+      <!-- Agentic task status bar -->
+      <div class="task-status-bar" id="task-status-bar">
+        <div class="task-phase-dots">
+          <div class="task-phase-dot" id="phase-thinking"></div>
+          <div class="task-phase-dot" id="phase-planning"></div>
+          <div class="task-phase-dot" id="phase-coding"></div>
+          <div class="task-phase-dot" id="phase-integrating"></div>
+        </div>
+        <span class="task-phase-label" id="task-phase-label">Running...</span>
+        <button class="task-phase-cancel" onclick="AgentTask&&AgentTask.cancel()">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg> Cancel
+        </button>
+      </div>
+      <!-- Breadcrumb -->
+      <div class="breadcrumb" id="breadcrumb">
+        <span class="bc-item" id="bc-project">—</span>
+        <span class="bc-sep">&gt;</span>
+        <span class="bc-item" id="bc-file">no file open</span>
+      </div>
+
+      <!-- EDITOR WRAPPER -->
+      <div class="editor-wrap" id="editor-wrap">
+        <!-- Tab bar -->
+        <div class="tab-bar">
+          <div class="tab-list" id="tab-list"></div>
+          <div class="tab-bar-right">
+            <button class="run-preview-btn" id="btn-run-preview" onclick="LivePreview&&LivePreview.open?.()||PreviewMgr&&PreviewMgr.open()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Run
+            </button>
+            <button class="ib sm" id="btn-save-file" title="Save File (Ctrl+S)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            </button>
+            <button class="ib sm" id="btn-editor-undo" title="Undo (Ctrl+Z)">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M3 13C5.6 7.6 12 5 17 8a9 9 0 0 1 4 7"/></svg>
+            </button>
+            <button class="ib sm" id="btn-editor-redo" title="Redo (Ctrl+Y)">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"/><path d="M21 13c-2.6-5.4-9-8-14-5a9 9 0 0 0-4 7"/></svg>
+            </button>
+            <button class="ib sm" id="btn-editor-diff" title="Show Diff / Revert AI Changes">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3"/><path d="m15 9 6-6"/><circle cx="12" cy="19" r="3"/></svg>
+            </button>
+            <button class="ib sm" id="btn-close-all" title="Close All Tabs">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+        </div>
+        <!-- Breadcrumb -->
+        <div id="breadcrumb"></div>
+        <!-- Monaco Editor -->
+        <div id="monaco-host">
+          <div id="welcome-screen" class="welcome">
+            <div class="welcome-logo">
+              <svg width="56" height="56" viewBox="0 0 1254 1254" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="OrinIDE">
+                <defs>
+                  <linearGradient id="wl-ring" x1="280" y1="220" x2="1040" y2="760" gradientUnits="userSpaceOnUse">
+                    <stop offset="0" stop-color="#9D5CFF"/><stop offset="0.42" stop-color="#7C3AED"/>
+                    <stop offset="0.75" stop-color="#3B2173"/><stop offset="1" stop-color="#160B2E"/>
+                  </linearGradient>
+                  <linearGradient id="wl-bar" x1="745" y1="845" x2="1080" y2="940" gradientUnits="userSpaceOnUse">
+                    <stop offset="0" stop-color="#9D5CFF"/><stop offset="1" stop-color="#7C3AED"/>
+                  </linearGradient>
+                </defs>
+                <path d="M600 213 A 410 410 0 1 1 248 822" fill="none" stroke="url(#wl-ring)" stroke-width="90" stroke-linecap="round"/>
+                <path d="M458 432 L790 637 L458 842 L458 706 L600 637 L458 568 Z" fill="#F8F6FF"/>
+                <rect x="752" y="848" width="234" height="90" rx="12" fill="url(#wl-bar)"/>
+              </svg>
+            </div>
+            <div class="welcome-title">OrinIDE</div>
+            <div class="welcome-sub">AI-Powered Development Environment</div>
+            <div class="welcome-actions">
+              <button class="w-btn" onclick="openModal('project-modal')">New Project</button>
+              <button class="w-btn" onclick="document.getElementById('global-zip-input').click()">Import ZIP</button>
+              <button class="w-btn" onclick="CommandPalette.open()">Command Palette &nbsp; Ctrl+P</button>
+            </div>
+            <div class="welcome-keys">
+              <div class="wk-row"><span class="wk">Ctrl+S</span><span>Save</span></div>
+              <div class="wk-row"><span class="wk">Ctrl+P</span><span>Command Palette</span></div>
+              <div class="wk-row"><span class="wk">Ctrl+N</span><span>New File</span></div>
+              <div class="wk-row"><span class="wk">Ctrl+B</span><span>Toggle Sidebar</span></div>
+              <div class="wk-row"><span class="wk">Ctrl+`</span><span>Toggle Terminal</span></div>
+              <div class="wk-row"><span class="wk">Ctrl+W</span><span>Close Tab</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== BOTTOM PANEL (tabbed terminal / problems / output) ===== -->
+      <div class="rz rz-n" id="rz-terminal"></div>
+      <div class="bottom-panel" id="bottom-panel">
+        <div class="bp-tabs">
+          <button class="bp-tab active" data-bp="terminal" onclick="BottomPanel.show('terminal')">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+            Terminal
+          </button>
+          <button class="bp-tab" data-bp="problems" onclick="BottomPanel.show('problems')">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Problems
+          </button>
+          <button class="bp-tab" data-bp="output" onclick="BottomPanel.show('output')">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+            Output
+          </button>
+          <div class="bp-spacer"></div>
+          <button class="term-action-btn" id="btn-term-new" title="New Session">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New
+          </button>
+          <button class="term-action-btn" id="btn-term-clear" title="Clear Terminal">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+            Clear
+          </button>
+          <button class="ib sm" id="btn-bp-close" title="Close Panel (Ctrl+`)">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <!-- Terminal content -->
+        <div class="bp-content active" id="bp-terminal">
+          <div class="terminal-wrap" id="terminal-wrap">
+            <div class="term-body">
+              <div id="xterm-host"></div>
+              <div id="fallback-term" class="fallback-term hidden">
+                <div id="term-lines"></div>
+                <div class="term-input-row">
+                  <span class="term-prompt">$</span>
+                  <input id="term-input" class="term-input" type="text" placeholder="Enter command..." autocomplete="off" spellcheck="false">
+                  <button class="ib sm" id="btn-term-run">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div id="git-term-panel" class="git-term-panel hidden">
+                <div class="git-tp-header">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="6" y1="9" x2="6" y2="15"/><path d="M13 6h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3"/></svg>
+                  Git Terminal
+                  <button class="git-tp-close" onclick="GitTermPanel.toggle()">×</button>
+                </div>
+                <div class="git-tp-quick">
+                  <button onclick="GitTermPanel.run('git init')">init</button>
+                  <button onclick="GitTermPanel.run('git status')">status</button>
+                  <button onclick="GitTermPanel.run('git log --oneline -15')">log</button>
+                  <button onclick="GitTermPanel.run('git diff --stat')">diff</button>
+                  <button onclick="GitTermPanel.run('git add .')">add .</button>
+                  <button onclick="GitTermPanel.runCommit()">commit</button>
+                  <button onclick="GitTermPanel.run('git pull')">pull</button>
+                  <button onclick="GitTermPanel.run('git push')">push</button>
+                  <button onclick="GitTermPanel.run('git branch -a')">branches</button>
+                  <button onclick="GitTermPanel.run('git stash list')">stash</button>
+                  <button onclick="GitTermPanel.run('git remote -v')">remotes</button>
+                  <button onclick="GitTermPanel.run('git fetch --all')">fetch</button>
+                </div>
+                <div class="git-tp-input-row">
+                  <span>git</span>
+                  <input id="git-term-input" type="text" placeholder="command" autocomplete="off" spellcheck="false">
+                  <button onclick="GitTermPanel.runCustom()">Run</button>
+                </div>
+                <div id="git-term-output" class="git-term-output"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Problems content -->
+        <div class="bp-content" id="bp-problems">
+          <div id="problems-list" style="flex:1;overflow:auto;padding:6px 0;font-size:11.5px;font-family:var(--mono)">
+            <div class="bp-placeholder" id="problems-placeholder">No problems detected</div>
+          </div>
+        </div>
+        <!-- Output content -->
+        <div class="bp-content" id="bp-output">
+          <div id="output-log" style="flex:1;overflow:auto;padding:6px 10px;font-size:11.5px;font-family:var(--mono);white-space:pre-wrap;color:var(--tx2)"></div>
+          <div class="bp-placeholder" id="output-placeholder">No output yet — run a command or execute code</div>
+        </div>
+      </div>
+
+    </div><!-- /center -->
+
+    <!-- ===== AI PANELS (right side) ===== -->
+    <div class="rz rz-w" id="rz-chat"></div>
+
+    <!-- CHAT PANEL -->
+    <aside class="chat-panel active" id="chat-panel" data-panel="ai">
+
+      <div class="chat-header">
+        <span class="chat-title">AI ASSISTANT</span>
+        <div class="chat-header-right">
+          <button class="ib sm" id="btn-git-header" title="Git Commands" onclick="GitPanel.toggle()" style="color:var(--acc)">
+<?xml version="1.0" encoding="utf-8"?>
+<!-- License: MIT. Made by vscode-icons: https://github.com/vscode-icons/vscode-icons -->
+<svg width="12" height="12" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><title>file_type_git</title><path d="M29.472,14.753,17.247,2.528a1.8,1.8,0,0,0-2.55,0L12.158,5.067l3.22,3.22a2.141,2.141,0,0,1,2.712,2.73l3.1,3.1a2.143,2.143,0,1,1-1.285,1.21l-2.895-2.895v7.617a2.141,2.141,0,1,1-1.764-.062V12.3a2.146,2.146,0,0,1-1.165-2.814L10.911,6.314,2.528,14.7a1.8,1.8,0,0,0,0,2.551L14.753,29.472a1.8,1.8,0,0,0,2.55,0L29.472,17.3a1.8,1.8,0,0,0,0-2.551" style="fill:#8888aa"/><path d="M12.158,5.067l3.22,3.22a2.141,2.141,0,0,1,2.712,2.73l3.1,3.1a2.143,2.143,0,1,1-1.285,1.21l-2.895-2.895v7.617a2.141,2.141,0,1,1-1.764-.062V12.3a2.146,2.146,0,0,1-1.165-2.814L10.911,6.314" style="fill:#000"/></svg>
+          </button>
+          <button class="ib sm" id="btn-ollama-quick" title="Ollama Quick Select" onclick="OllamaPanel.toggle()" style="color:#4caf50">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </button>
+          <button class="model-badge" id="model-badge" title="Switch AI model" onclick="ModelPicker.toggle(this)">
+            <span id="model-badge-label">GPT-OSS-120B</span>
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="cppos-quick-wrap">
+            <button class="ib sm" id="btn-chat-pos" title="Move AI Panel">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+            </button>
+            <div class="cppos-quick-menu hidden" id="cppos-quick-menu">
+              <button data-pos="left" type="button">
+                <svg width="16" height="13" viewBox="0 0 28 22" fill="none"><rect x="0.5" y="0.5" width="27" height="21" rx="2.5" stroke="currentColor" stroke-width="1.2"/><rect x="2" y="2" width="8" height="18" rx="1" fill="currentColor"/></svg>
+                Left
+              </button>
+              <button data-pos="right" type="button">
+                <svg width="16" height="13" viewBox="0 0 28 22" fill="none"><rect x="0.5" y="0.5" width="27" height="21" rx="2.5" stroke="currentColor" stroke-width="1.2"/><rect x="18" y="2" width="8" height="18" rx="1" fill="currentColor"/></svg>
+                Right
+              </button>
+            </div>
+          </div>
+          <button class="ib sm" id="btn-chat-sessions" title="Chat History" onclick="ChatSessions.open()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </button>
+          <button class="ib sm" id="btn-chat-clear" title="Clear Chat">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </button>
+          <button class="ib sm" id="btn-chat-stop" title="Stop Generation" style="display:none">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- CHAT / CODE MODE BAR -->
+      <div class="chat-mode-bar">
+        <button class="cmode-btn active" id="cmode-chat" onclick="ChatModeSwitch.set('chat',this)">
+           Chat
+        </button>
+        <button class="cmode-btn" id="cmode-code" onclick="ChatModeSwitch.set('code',this)">
+           Coding
+        </button>
+        <button class="cmode-btn" id="cmode-patch" onclick="ChatModeSwitch.set('patch',this)" title="Edit files with surgical patches — no full rewrites">
+           Patch
+        </button>
+        <button id="btn-toggle-terminal-chat" onclick="ChatModeSwitch.toggleTerminal()" title="Toggle Terminal">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          Terminal
+        </button>
+      </div>
+
+      <!-- Active skill chip -->
+      <div class="active-skill-chip" id="active-skill-chip" style="display:none">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--ac3);flex-shrink:0"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span id="skill-chip-label" style="flex:1;font-size:11px;color:var(--tx1)">Skill active</span>
+        <button onclick="SkillsMgr&&SkillsMgr.activate(SkillsMgr.activeSkillId)" style="background:none;border:none;color:var(--tx3);cursor:pointer;padding:2px 4px;border-radius:2px" title="Deactivate">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <!-- SCROLLABLE MESSAGES AREA -->
+      <div class="chat-messages" id="chat-messages">
+        <div class="chat-empty" id="chat-empty">
+          <div class="ce-icon">
+            <svg width="28" height="28" viewBox="0 0 1254 1254" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="OrinIDE">
+              <defs>
+                <linearGradient id="ce-ring" x1="280" y1="220" x2="1040" y2="760" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#9D5CFF"/><stop offset="0.42" stop-color="#7C3AED"/>
+                  <stop offset="0.75" stop-color="#3B2173"/><stop offset="1" stop-color="#160B2E"/>
+                </linearGradient>
+                <linearGradient id="ce-bar" x1="745" y1="845" x2="1080" y2="940" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#9D5CFF"/><stop offset="1" stop-color="#7C3AED"/>
+                </linearGradient>
+              </defs>
+              <path d="M600 213 A 410 410 0 1 1 248 822" fill="none" stroke="url(#ce-ring)" stroke-width="90" stroke-linecap="round"/>
+              <path d="M458 432 L790 637 L458 842 L458 706 L600 637 L458 568 Z" fill="#F8F6FF"/>
+              <rect x="752" y="848" width="234" height="90" rx="12" fill="url(#ce-bar)"/>
+            </svg>
+          </div>
+          <div class="ce-title">AI Assistant</div>
+          <div class="ce-sub">Select a mode above and type your request, or use <kbd>Ctrl+L</kbd> to toggle this panel.</div>
+          <div class="ce-shortcuts">
+            <span class="ce-sc"><kbd>Ctrl+L</kbd> Toggle Panel</span>
+            <span class="ce-sc"><kbd>Ctrl+Enter</kbd> Send</span>
+            <span class="ce-sc"><kbd>Esc</kbd> Close</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Token usage display -->
+      <div class="token-usage hidden" id="token-usage">
+        <span id="token-usage-text"></span>
+      </div>
+
+      <!-- Apply bar (shown after AI generates files) -->
+      <div class="apply-bar hidden" id="apply-bar">
+        <button class="apply-btn primary" id="btn-apply">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Apply to Codebase
+        </button>
+        <button class="apply-btn" id="btn-preview-patch" title="Preview changes before applying">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3"/><path d="m15 9 6-6"/><circle cx="12" cy="19" r="3"/></svg>
+          Preview
+        </button>
+        <button class="apply-btn" id="btn-copy-resp">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy
+        </button>
+      </div>
+      <!-- Patch preview (collapsible) -->
+      <div class="patch-preview hidden" id="patch-preview">
+        <div class="pp-header" onclick="ChatMgr.togglePatchPreview()">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          <span id="pp-label">Changes pending</span>
+          <span class="pp-count" id="pp-count">0 files</span>
+        </div>
+        <div class="pp-body" id="pp-body"></div>
+      </div>
+
+
+      <!-- Chat input area (fixed at bottom, never scrolls away) -->
+      <div class="chat-input-wrap">
+        <!-- Extras popup -->
+        <div id="chat-extras-popup" class="chat-extras-popup hidden">
+          <div class="cep-section">
+            <div class="cep-label">Mode</div>
+            <div class="cep-row">
+              <button class="mode-btn active" data-mode="chat">Chat</button>
+              <button class="mode-btn" data-mode="generate">Generate</button>
+              <button class="mode-btn" data-mode="patch">Patch</button>
+              <button class="mode-btn" data-mode="edit">Edit File</button>
+              <button class="mode-btn" data-mode="explain">Explain</button>
+            </div>
+          </div>
+          <div class="cep-sep"></div>
+          <div class="cep-section">
+            <div class="cep-label">AI Actions</div>
+            <div class="cep-grid">
+              <button class="cep-btn" onclick="AIExplain.run();ChatExtras.close()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Explain
+              </button>
+              <button class="cep-btn" onclick="AIRefactor.open();ChatExtras.close()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                Refactor
+              </button>
+              <button class="cep-btn" onclick="AIFixBugs.run();ChatExtras.close()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+                Fix Bugs
+              </button>
+              <button class="cep-btn" onclick="AIOptimize.run();ChatExtras.close()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                Optimize
+              </button>
+              <button class="cep-btn" onclick="AIAddComments.run();ChatExtras.close()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Add Docs
+              </button>
+              <button class="cep-btn" onclick="AIGenerateTests.run();ChatExtras.close()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                Tests
+              </button>
+              <button class="cep-btn" onclick="AITranslate.run();ChatExtras.close()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                Translate
+              </button>
+              <button class="cep-btn" onclick="TokenEstimator.showForCurrentFile();ChatExtras.close()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                Tokens
+              </button>
+            </div>
+          </div>
+          <div class="cep-sep"></div>
+          <div class="cep-section">
+            <div class="cep-label">Tools</div>
+            <div class="cep-grid">
+              <button class="cep-btn" onclick="openModal('skills-modal');ChatExtras.close()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                Skills<span id="skills-active-badge" class="skills-active-badge" style="display:none"></span>
+              </button>
+              <button class="cep-btn" onclick="SnippetsMgr.open();ChatExtras.close()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                Snippets
+              </button>
+              <button class="cep-btn" onclick="ChatSessions.open();ChatExtras.close()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Sessions
+              </button>
+              <button class="cep-btn" onclick="openModal('findreplace-modal');ChatExtras.close()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Find
+              </button>
+            </div>
+          </div>
+          <div class="cep-sep"></div>
+          <div class="cep-section">
+            <div class="cep-label">Git</div>
+            <div style="display:flex;flex-wrap:wrap;gap:3px">
+              <button class="git-cmd-btn" onclick="GitPanel.run('git status');ChatExtras.close()">status</button>
+              <button class="git-cmd-btn" onclick="GitPanel.run('git log --oneline -10');ChatExtras.close()">log</button>
+              <button class="git-cmd-btn" onclick="GitPanel.run('git diff');ChatExtras.close()">diff</button>
+              <button class="git-cmd-btn" onclick="GitPanel.run('git add .');ChatExtras.close()">add .</button>
+              <button class="git-cmd-btn" onclick="GitPanel.run('git pull');ChatExtras.close()">pull</button>
+              <button class="git-cmd-btn" onclick="GitPanel.run('git push');ChatExtras.close()">push</button>
+              <button class="git-cmd-btn" onclick="GitPanel.run('git stash');ChatExtras.close()">stash</button>
+              <button class="git-cmd-btn" onclick="GitPanel.run('git branch -a');ChatExtras.close()">branches</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Git panel output (hidden by default) -->
+        <div id="git-panel" class="git-panel hidden">
+          <div class="git-panel-header">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="6" y1="9" x2="6" y2="15"/></svg>
+            Git Output
+            <button class="git-panel-close" onclick="GitPanel.toggle()">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <div class="git-cmd-input-row">
+            <span class="git-prompt">git</span>
+            <input id="git-cmd-input" class="git-cmd-input" type="text" placeholder="commit -m 'msg'" autocomplete="off" spellcheck="false">
+            <button class="git-cmd-run" onclick="GitPanel.runCustom()">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+          </div>
+          <div id="git-output" class="git-output"></div>
+        </div>
+
+        <!-- Main textarea row -->
+        <div class="chat-row">
+          <div class="chat-input-inner">
+            <textarea id="chat-input" class="chat-input" rows="2"
+              placeholder="Ask AI to generate, explain, or modify code..."></textarea>
+            <div class="chat-input-actions">
+              <button class="cia-btn" id="btn-upload-asset-ciub" type="button" title="Upload file into project">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </button>
+              <button class="cia-btn" id="btn-chat-extras" title="More options" onclick="ChatExtras.toggle(this)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+              </button>
+              <button class="cia-btn" id="btn-voice-chat" data-voice="chat-input" title="Voice input">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+              </button>
+              <button id="btn-send" class="send-btn" title="Send (Enter)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="attach-preview" class="attach-preview hidden"></div>
+      </div>
+
+    </aside>
+
+    <!-- Agents resize handle (west of agents) -->
+    <div class="rz rz-w" id="rz-agents"></div>
+
+    <!-- AGENTS PANEL -->
+    <aside class="agents-panel" id="agents-panel" data-panel="agents">
+
+      <div class="agents-header">
+        <span class="agents-title">AI AGENTS</span>
+        <div class="agents-header-right">
+          <button class="ib sm" id="btn-ollama-agents" title="Ollama Quick Select" onclick="OllamaPanel.toggle()" style="color:#4caf50">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </button>
+          <button class="ib sm" id="btn-agents-sessions" title="Agent History" onclick="AgentSessions.open()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </button>
+          <button class="ib sm" id="btn-agents-config" title="Configure Agents">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </button>
+          <button class="ib sm" id="btn-agents-clear" title="Clear Agent Conversation">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </button>
+          <button class="ib sm" id="btn-agents-stop" title="Stop" style="display:none">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Agent config row -->
+      <div class="agents-config-row" id="agents-config-row"></div>
+
+      <!-- Task phase pills -->
+      <div class="agents-task-phases" id="agents-task-phases">
+        <button class="phase-btn" id="aphase-thinking"><span class="phase-dot" style="background:var(--cy)"></span>Thinking</button>
+        <button class="phase-btn" id="aphase-planning"><span class="phase-dot" style="background:var(--gr)"></span>Planning</button>
+        <button class="phase-btn" id="aphase-coding"><span class="phase-dot" style="background:var(--ac)"></span>Coding</button>
+        <button class="phase-btn" id="aphase-integrating"><span class="phase-dot" style="background:var(--yw)"></span>Integrating</button>
+      </div>
+      <!-- Status bar -->
+      <div class="agents-status-bar" id="agents-status-bar">
+        <span class="agents-status-dot"></span>
+        <span class="agents-status-label">Idle — configure agents and send a prompt</span>
+      </div>
+
+      <!-- Scrollable agent messages -->
+      <div class="agents-messages" id="agents-messages"></div>
+
+      <!-- Token usage display for agents -->
+      <div class="token-usage hidden" id="agents-token-usage">
+        <span id="agents-token-usage-text"></span>
+      </div>
+
+      <!-- Apply bar (shown after agents produce files) -->
+      <div class="apply-bar hidden" id="agents-apply-bar">
+        <button class="apply-btn primary" id="btn-agents-apply">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Apply to Codebase
+        </button>
+        <button class="apply-btn" id="btn-agents-copy">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy
+        </button>
+      </div>
+
+      <!-- Command runner bar (shown after agents produce commands) -->
+      <div class="apply-bar hidden" id="agents-cmd-bar">
+        <div class="agents-cmd-header">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          Commands to Run
+          <button class="apply-btn" onclick="AgentsMgr.runAllCmds()" style="margin-left:auto">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Run All
+          </button>
+        </div>
+        <div id="agents-cmd-list" class="agents-cmd-list"></div>
+      </div>
+
+      <!-- Input area -->
+      <div class="agents-input-wrap">
+        <div class="agents-row">
+          <textarea id="agents-input" class="agents-input" rows="2" placeholder="Ask a team of AI agents to collaborate..."></textarea>
+          <button id="btn-agents-send" class="agents-send-btn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+
+    </aside>
+
+  </div><!-- /layout-main -->
+
+  <!-- MOBILE BOTTOM TAB BAR (hidden on desktop) -->
+  <nav class="mob-tabs" id="mob-tabs">
+    <button class="mob-tab active" data-panel="sidebar" title="Files (Explorer)">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      Files
+    </button>
+    <button class="mob-tab" data-panel="editor" title="Editor">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Editor
+    </button>
+    <button class="mob-tab" data-panel="chat" title="AI Chat">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      AI
+    </button>
+    <button class="mob-tab" data-panel="terminal" title="Terminal">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+      Term
+    </button>
+    <button class="mob-tab" data-panel="agents" title="AI Agents">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Agents
+    </button>
+  </nav>
+
+  <!-- MOBILE FAB — single button, all features inside -->
+  <div id="mob-fab">
+    <button id="mob-fab-btn" onclick="MobFAB.toggle()" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </button>
+    <div id="mob-fab-menu">
+      <button class="fab-item" onclick="MobFAB.run('run')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span>Run Project</span>
+      </button>
+      <button class="fab-item" onclick="MobFAB.run('preview')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span>Live Preview</span>
+      </button>
+      <button class="fab-item" onclick="MobFAB.run('project')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        <span>Projects</span>
+      </button>
+      <button class="fab-item" onclick="MobFAB.run('import')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span>Import ZIP</span>
+      </button>
+      <button class="fab-item" onclick="MobFAB.run('export')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Export ZIP</span>
+      </button>
+      <button class="fab-item" onclick="MobFAB.run('model')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span>AI Model</span>
+      </button>
+      <button class="fab-item" id="fab-skills" onclick="SkillsMgr&&(openModal('skills-modal'),MobFAB.toggle())">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span>Skills</span>
+      </button>
+      <button class="fab-item" onclick="MobFAB.run('features')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span>Features</span>
+      </button>
+      <button class="fab-item" onclick="MobFAB.run('settings')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Settings</span>
+      </button>
+      <button class="fab-item" onclick="MobFAB.run('project')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        <span>Projects</span>
+      </button>
+      <button class="fab-item" onclick="MobFAB.run('import')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span>Import ZIP</span>
+      </button>
+      <button class="fab-item" onclick="MobFAB.run('export')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Export ZIP</span>
+      </button>
+      <button class="fab-item" onclick="MobFAB.run('preview')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span>Live Preview</span>
+      </button>
+      <button class="fab-item" onclick="MobFAB.run('features')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span>Features</span>
+      </button>
+      <button class="fab-item" onclick="MobFAB.run('model')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span>AI Model</span>
+      </button>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- ======== MODALS ======== -->
+
+<!-- Project Manager -->
+<div id="project-modal" class="modal-bg hidden">
+  <div class="modal-box sm">
+    <div class="modal-head"><span>Project Manager</span><button class="ib sm modal-x" data-target="project-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="field"><label>New Project Name</label><input id="inp-new-project" class="inp" type="text" placeholder="my-project"></div>
+      <button class="btn-p" id="btn-create-project">Create Project</button>
+      <div class="divider">or select existing</div>
+      <div id="modal-project-list" class="modal-proj-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- New File / Folder -->
+<div id="newfile-modal" class="modal-bg hidden">
+  <div class="modal-box sm">
+    <div class="modal-head"><span id="newfile-title">New File</span><button class="ib sm modal-x" data-target="newfile-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="field"><label id="newfile-lbl">File path (e.g. src/index.js)</label><input id="inp-newfile" class="inp" type="text" placeholder="filename.js"></div>
+      <button class="btn-p" id="btn-confirm-newfile">Create</button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings (tabbed: General + Providers) -->
+<div id="settings-modal" class="modal-bg hidden">
+  <div class="modal-box md">
+    <div class="modal-head"><span>Settings</span><button class="ib sm modal-x" data-target="settings-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="settings-tabs">
+      <button class="settings-tab active" data-tab="s-gen">General</button>
+      <button class="settings-tab" data-tab="s-prov">Providers</button>
+    </div>
+    <div class="modal-body">
+      <!-- GENERAL TAB -->
+      <div class="settings-tab-content active" id="s-gen">
+        <div class="settings-group">
+          <div class="settings-group-title">AI</div>
+          <div class="field"><label>OpenRouter API Key</label><input id="s-apikey" class="inp" type="password" placeholder="sk-or-..."></div>
+          <div class="field"><label>Active Model</label>
+            <div class="s-model-display" id="s-model-display">openrouter/free</div>
+          </div>
+          <div class="field"><label>Custom Model ID <span style="font-weight:400;color:var(--tx2);font-size:10px">(OpenRouter — free or paid)</span></label>
+            <div class="s-custom-model-row">
+              <input id="s-model" class="inp" type="text" placeholder="e.g. openrouter/free or openai/gpt-4o" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off">
+              <button id="s-model-apply" class="s-model-apply-btn" type="button" title="Apply model">Apply</button>
+            </div>
+            <div class="s-model-presets">
+              <span class="s-preset-label">Quick pick:</span>
+              <button class="s-preset" data-value="openrouter/free">openrouter/free</button>
+              <button class="s-preset" data-value="poolside/laguna-xs.2:free">Laguna-xs.2</button>
+              <button class="s-preset" data-value="google/gemma-3-27b-it:free">Gemma 3</button>
+              <button class="s-preset" data-value="z-ai/glm-4.5-air:free">MiniMax</button>
+              <button class="s-preset" data-value="anthropic/claude-sonnet-4-5">Claude</button>
+              <button class="s-preset" data-value="openai/gpt-4o">GPT-4o</button>
+            </div>
+          </div>
+        </div>
+        <div class="settings-group">
+          <div class="settings-group-title">Editor</div>
+          <div class="field row"><label>Font Size</label><input id="s-fontsize" class="inp narrow" type="number" min="10" max="24" value="14"></div>
+          <div class="field row"><label>Tab Size</label><input id="s-tabsize" class="inp narrow" type="number" min="2" max="8" value="2"></div>
+          <div class="field row"><label>Word Wrap</label><input id="s-wordwrap" type="checkbox" checked></div>
+          <div class="field row"><label>Minimap</label><input id="s-minimap" type="checkbox"></div>
+          <div class="field row"><label>Auto Save (2s)</label><input id="s-autosave" type="checkbox"></div>
+          <div class="field row"><label>Format on Save</label><input id="s-format-onsave" type="checkbox"></div>
+          <div class="field"><label>Theme</label>
+            <select id="s-theme" class="inp">
+              <option value="orin-dark">Orin Dark</option>
+              <option value="orin-light">Orin Light</option>
+              <option value="monokai">Monokai</option>
+              <option value="solarized-dark">Solarized Dark</option>
+              <option value="dracula">Dracula</option>
+              <option value="high-contrast">High Contrast</option>
+            </select>
+          </div>
+        </div>
+        <div class="settings-group">
+          <div class="settings-group-title">Export</div>
+          <div class="field"><label>Termux Export Path</label><input id="s-exportpath" class="inp" type="text" placeholder="/storage/emulated/0/"></div>
+        </div>
+        <div class="settings-group">
+          <div class="settings-group-title">GitHub</div>
+          <div class="field"><label>GitHub Token</label><input id="s-github-token" class="inp" type="password" placeholder="ghp_..."></div>
+          <div class="field"><label>Git User Name</label><input id="s-git-user" class="inp" type="text" placeholder="Your Name"></div>
+          <div class="field"><label>Git User Email</label><input id="s-git-email" class="inp" type="email" placeholder="you@email.com"></div>
+        </div>
+        <div class="settings-group">
+          <div class="settings-group-title">Layout</div>
+          <div class="field">
+            <label>Explorer Sidebar Position</label>
+            <div class="sbpos-grid" id="sbpos-grid">
+              <button class="sbpos-opt" data-pos="left" type="button" title="Explorer on the left">
+                <svg width="28" height="22" viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0.5" y="0.5" width="27" height="21" rx="2.5" stroke="currentColor" stroke-width="1.2"/>
+                  <rect x="2" y="2" width="8" height="18" rx="1" fill="currentColor"/>
+                </svg>
+                <span>Left</span>
+              </button>
+              <button class="sbpos-opt" data-pos="right" type="button" title="Explorer on the right">
+                <svg width="28" height="22" viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0.5" y="0.5" width="27" height="21" rx="2.5" stroke="currentColor" stroke-width="1.2"/>
+                  <rect x="18" y="2" width="8" height="18" rx="1" fill="currentColor"/>
+                </svg>
+                <span>Right</span>
+              </button>
+            </div>
+          </div>
+          <div class="field">
+            <label>AI Chat Panel Position</label>
+            <div class="sbpos-grid" id="cppos-grid">
+              <button class="sbpos-opt cppos-opt" data-pos="left" type="button" title="AI panel on the left">
+                <svg width="28" height="22" viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0.5" y="0.5" width="27" height="21" rx="2.5" stroke="currentColor" stroke-width="1.2"/>
+                  <rect x="2" y="2" width="8" height="18" rx="1" fill="currentColor"/>
+                </svg>
+                <span>Left</span>
+              </button>
+              <button class="sbpos-opt cppos-opt" data-pos="right" type="button" title="AI panel on the right">
+                <svg width="28" height="22" viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0.5" y="0.5" width="27" height="21" rx="2.5" stroke="currentColor" stroke-width="1.2"/>
+                  <rect x="18" y="2" width="8" height="18" rx="1" fill="currentColor"/>
+                </svg>
+                <span>Right</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <button class="btn-p" id="btn-save-settings">Save Settings</button>
+      </div>
+      <!-- PROVIDERS TAB -->
+      <div class="settings-tab-content" id="s-prov">
+        <div class="settings-group">
+          <div class="settings-group-title">AI Providers <span style="font-weight:400;color:var(--tx2);font-size:10px">add OpenAI-compatible endpoints</span></div>
+          <div id="s-provider-list" class="s-provider-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROVIDER CONFIG MODAL (add/edit) -->
+<div id="provider-modal" class="modal-bg hidden">
+  <div class="modal-box sm">
+    <div class="modal-head"><span id="provider-modal-title">Add Provider</span><button class="ib sm modal-x" data-target="provider-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="field"><label>Provider Name</label><input id="p-name" class="inp" type="text" placeholder="e.g. OpenAI, Groq, Together"></div>
+      <div class="field"><label>Base URL <span style="font-weight:400;color:var(--tx2);font-size:10px">(OpenAI-compatible endpoint)</span></label><input id="p-baseurl" class="inp" type="text" placeholder="https://api.openai.com/v1"></div>
+      <div class="field"><label>API Key</label><input id="p-apikey" class="inp" type="password" placeholder="sk-..."></div>
+      <div style="display:flex;gap:6px;margin-top:8px">
+        <button class="btn-p" id="btn-save-provider" style="flex:1">Save Provider</button>
+        <button class="btn-s" id="btn-test-provider" style="flex:1">Test Connection</button>
+      </div>
+      <div id="p-status" class="s-prov-status"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Export -->
+<div id="export-modal" class="modal-bg hidden">
+  <div class="modal-box sm">
+    <div class="modal-head"><span>Export Project</span><button class="ib sm modal-x" data-target="export-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <p class="modal-p">Project: <strong id="export-proj-name"></strong></p>
+      <button class="btn-p" id="btn-dl-zip">Download ZIP</button>
+      <div class="field" style="margin-top:12px"><label>Export to Termux path</label><input id="inp-termux-path" class="inp" type="text" placeholder="/storage/emulated/0/Projects"></div>
+      <button class="btn-s" id="btn-export-termux">Export to Path</button>
+      <div id="export-msg" class="msg-ok"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Import ZIP / File -->
+<div id="import-modal" class="modal-bg hidden">
+  <div class="modal-box sm">
+    <div class="modal-head"><span>Import Project / File</span><button class="ib sm modal-x" data-target="import-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div class="dropzone" id="dropzone">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <p>Drop any file or ZIP here</p>
+        <p style="font-size:11px;color:var(--txt-dim);margin-top:4px">ZIP creates a project. Other files go into current project as assets.</p>
+        <button class="btn-s" style="margin-top:8px" onclick="document.getElementById('global-zip-input').click()">Browse Files</button>
+      </div>
+      <div class="field" style="margin-top:10px"><label>Project name (ZIP only — auto-detected if blank)</label><input id="inp-import-name" class="inp" type="text" placeholder="optional"></div>
+      <div id="import-msg" class="msg-ok"></div>
+    </div>
+  </div>
+</div>
+
+<!-- GitHub Clone / Create Modal -->
+<div id="github-modal" class="modal-bg hidden">
+  <div class="modal-box sm">
+    <div class="modal-head"><span>GitHub</span><button class="ib sm modal-x" data-target="github-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal-body">
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <button class="btn-p" onclick="document.getElementById('gh-clone-section').style.display='';document.getElementById('gh-create-section').style.display='none'">Clone Repo</button>
+        <button class="btn-s" onclick="document.getElementById('gh-create-section').style.display='';document.getElementById('gh-clone-section').style.display='none'">Create Repo</button>
+      </div>
+      <div id="gh-clone-section">
+        <div class="field"><label>Repository URL</label><input id="gh-clone-url" class="inp" type="url" placeholder="https://github.com/user/repo"></div>
+        <button class="btn-p" onclick="GitMgr.clone(document.getElementById('gh-clone-url').value);closeModal('github-modal')">Clone</button>
+      </div>
+      <div id="gh-create-section" style="display:none">
+        <div class="field"><label>Repository Name</label><input id="gh-repo-name" class="inp" type="text" placeholder="my-project"></div>
+        <button class="btn-p" onclick="GitMgr.createAndPush()">Create & Push</button>
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label>GitHub Token (for private repos & create)</label>
+        <input id="gh-token-input" class="inp" type="password" placeholder="ghp_..." value="">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Live Preview -->
+<div id="preview-modal" class="modal-bg hidden">
+  <div class="modal-box preview-box">
+    <div class="modal-head">
+      <span>Live Preview</span>
+      <div style="display:flex;gap:4px;align-items:center">
+        <button class="ib sm" id="btn-refresh-preview" title="Refresh"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button>
+        <button class="ib sm" id="btn-preview-new-tab" title="Open in new tab"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></button>
+        <button class="ib sm modal-x" data-target="preview-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+    </div>
+    <iframe id="preview-frame" class="preview-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+  </div>
+</div>
+
+<!-- Context Menu -->
+<div id="ctx-menu" class="ctx-menu hidden">
+  <div class="ctx-item" data-action="open">Open</div>
+  <div class="ctx-item" data-action="rename">Rename</div>
+  <div class="ctx-item" data-action="duplicate">Duplicate</div>
+  <div class="ctx-item" data-action="toggle-fav">Toggle Favorite</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" data-action="new-file-here">New File Here</div>
+  <div class="ctx-item" data-action="new-folder-here">New Folder Here</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item danger" data-action="delete">Delete</div>
+</div>
+
+<!-- Command Palette -->
+<div id="cmd-palette" class="cmd-bg hidden">
+  <div class="cmd-box">
+    <input id="cmd-input" class="cmd-input" type="text" placeholder="Type a command...">
+    <div id="cmd-list" class="cmd-list"></div>
+  </div>
+</div>
+
+<!-- Quick Open (Ctrl+P) -->
+<div id="qo-modal" class="cmd-bg hidden">
+  <div class="cmd-box">
+    <div class="qo-header">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="qo-input" class="cmd-input" type="text" placeholder="Search files by name...">
+    </div>
+    <div id="qo-list" class="cmd-list"></div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div id="loading" class="loading hidden">
+  <div class="loading-spin"></div>
+  <div id="loading-txt">Working...</div>
+</div>
+
+<!-- Toasts -->
+<div id="toasts"></div>
+
+<!-- Hidden global file input for ZIP import -->
+<input id="global-zip-input" type="file" accept=".zip,application/zip" style="display:none">
+<!-- Asset upload input for chat Upload button -->
+<input id="chat-asset-upload-input" type="file" accept="*/*" multiple style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px">
+<!-- Hidden asset upload input (any file type) -->
+<input id="asset-file-input" type="file" accept="*/*" multiple style="display:none">
+
+<!-- ======== IMPORT ASSET INTO PROJECT MODAL ======== -->
+<div id="asset-import-modal" class="modal-bg hidden">
+  <div class="modal-box sm">
+    <div class="modal-head">
+      <span>Import Asset into Project</span>
+      <button class="ib sm modal-x" data-target="asset-import-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="dropzone" id="asset-dropzone">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <p>Drop image, video, audio, or any file</p>
+        <p style="font-size:11px;color:var(--txt-dim);margin-top:4px">Supports: jpg, png, gif, webp, svg, mp4, mp3, wav, pdf, etc.</p>
+        <button class="btn-s" style="margin-top:8px" onclick="document.getElementById('asset-file-input').click()">Browse Files</button>
+      </div>
+      <div class="field" style="margin-top:10px">
+        <label>Destination folder in project</label>
+        <input id="asset-dest-folder" class="inp" type="text" placeholder="assets/images">
+      </div>
+      <div class="field">
+        <label>Rename file (optional)</label>
+        <input id="asset-rename-inp" class="inp" type="text" placeholder="Leave blank to keep original name">
+      </div>
+      <div id="asset-import-msg" class="msg-ok"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== GIT-STYLE DIFF VIEWER MODAL ======== -->
+<div id="diff-modal" class="modal-bg hidden">
+  <div class="modal-box diff-box">
+    <div class="modal-head">
+      <div style="display:flex;align-items:center;gap:8px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="6" y1="9" x2="6" y2="15"/><path d="M13 6h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3"/><polyline points="15 12 13 10 11 12"/><polyline points="15 12 13 14 11 12"/></svg>
+        <span>Diff Viewer — AI Changes</span>
+        <span id="diff-summary-badge" class="diff-summary-badge"></span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <div class="diff-view-toggle">
+          <button class="dvt-btn" id="dvt-split" onclick="DiffViewer.setView('split')" title="Split view">Split</button>
+          <button class="dvt-btn active" id="dvt-unified" onclick="DiffViewer.setView('unified')" title="Unified view">Unified</button>
+        </div>
+        <button class="btn-p sm" id="diff-accept">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Accept
+        </button>
+        <button class="btn-s sm" id="diff-reject">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Reject
+        </button>
+        <button class="ib sm modal-x" data-target="diff-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+    </div>
+    <div class="diff-stats-bar" id="diff-stats-bar">
+      <span class="diff-stat-file" id="diff-stat-file"></span>
+      <span class="diff-stat-adds" id="diff-stat-adds"></span>
+      <span class="diff-stat-rems" id="diff-stat-rems"></span>
+    </div>
+    <div class="modal-body diff-body" id="diff-body">
+      <!-- unified view -->
+      <div id="diff-unified-view" class="diff-unified-view">
+        <table class="diff-table" id="diff-table"><tbody id="diff-tbody"></tbody></table>
+      </div>
+      <!-- split view -->
+      <div id="diff-split-view" class="diff-split-view hidden">
+        <div class="diff-split-pane">
+          <div class="diff-pane-header">Before</div>
+          <table class="diff-table"><tbody id="diff-left-tbody"></tbody></table>
+        </div>
+        <div class="diff-split-pane">
+          <div class="diff-pane-header">After</div>
+          <table class="diff-table"><tbody id="diff-right-tbody"></tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== SNIPPETS MODAL ======== -->
+<div id="snippets-modal" class="modal-bg hidden">
+  <div class="modal-box md">
+    <div class="modal-head">
+      <span>Insert Snippet</span>
+      <button class="ib sm modal-x" data-target="snippets-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <input id="snippet-search" class="inp" type="text" placeholder="Search snippets...">
+      <div id="snippet-list" class="snippet-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== FIND & REPLACE MODAL ======== -->
+<div id="findreplace-modal" class="modal-bg hidden">
+  <div class="modal-box sm">
+    <div class="modal-head">
+      <span>Project-wide Find &amp; Replace</span>
+      <button class="ib sm modal-x" data-target="findreplace-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="field"><label>Find</label><input id="fr-find" class="inp" type="text" placeholder="Search text..."></div>
+      <div class="field"><label>Replace with</label><input id="fr-replace" class="inp" type="text" placeholder="Replacement text..."></div>
+      <p class="modal-p" style="color:var(--txt-dim);font-size:11px">Searches all text files in the current project. This action cannot be undone.</p>
+      <button class="btn-p" id="btn-fr-run">Replace All</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODEL HEALTH CHECK MODAL -->
+<div id="model-health-modal" class="modal-bg hidden">
+  <div class="modal-box md">
+    <div class="modal-head"><span>Model Health Check</span>
+      <button class="ib sm modal-x" data-target="model-health-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-p" style="color:var(--txt-dim);font-size:11px">Tests a quick ping to the selected model. Requires your API key to be set.</p>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+        <select id="health-model-select" class="inp" style="flex:1;font-size:12px"></select>
+        <button class="btn-p" id="btn-health-run" style="white-space:nowrap">Test Model</button>
+      </div>
+      <div id="health-result" style="background:var(--bg2);border-radius:6px;padding:10px;min-height:60px;font-family:monospace;font-size:12px;color:var(--tx0);white-space:pre-wrap">Click "Test Model" to check if it responds...</div>
+    </div>
+  </div>
+</div>
+
+<!-- AI EXPLAIN MODAL -->
+<div id="ai-explain-modal" class="modal-bg hidden">
+  <div class="modal-box md">
+    <div class="modal-head"><span>AI Explain Code</span>
+      <button class="ib sm modal-x" data-target="ai-explain-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div id="ai-explain-out" style="background:var(--bg2);border-radius:6px;padding:12px;min-height:120px;font-size:13px;color:var(--tx0);overflow-y:auto;max-height:400px;line-height:1.6">Select code in the editor, then use <b>AI → Explain Selection</b> from the context menu or Command Palette.</div>
+    </div>
+  </div>
+</div>
+
+<!-- AI REFACTOR MODAL -->
+<div id="ai-refactor-modal" class="modal-bg hidden">
+  <div class="modal-box md">
+    <div class="modal-head"><span>AI Refactor</span>
+      <button class="ib sm modal-x" data-target="ai-refactor-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="field"><label>Refactor instruction</label><input id="refactor-prompt" class="inp" placeholder="e.g. convert to async/await, add error handling, optimize..."></div>
+      <button class="btn-p" id="btn-refactor-run">Refactor Selected Code</button>
+      <div id="ai-refactor-out" style="background:var(--bg2);border-radius:6px;padding:12px;margin-top:10px;min-height:80px;font-size:12px;color:var(--tx0);font-family:monospace;white-space:pre-wrap;overflow-y:auto;max-height:300px"></div>
+      <button class="btn-p" id="btn-refactor-apply" style="display:none;margin-top:8px">Apply Refactored Code</button>
+    </div>
+  </div>
+</div>
+
+<!-- MULTI-CHAT SESSIONS MODAL (timeline) -->
+<div id="chat-sessions-modal" class="modal-bg hidden">
+  <div class="modal-box lg">
+    <div class="modal-head"><span>Chat Sessions</span>
+      <div style="display:flex;gap:4px">
+        <button class="ib sm" id="btn-export-all-sessions" title="Export all sessions">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </button>
+        <button class="ib sm" id="btn-import-sessions" title="Import sessions">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </button>
+        <button class="ib sm modal-x" data-target="chat-sessions-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="sessions-toolbar">
+        <input id="sessions-search" class="inp" placeholder="Search sessions..." style="flex:1" oninput="ChatSessions.renderList()">
+        <input id="new-session-name" class="inp" placeholder="Session name (optional)..." style="flex:1">
+        <button class="btn-p" id="btn-new-session" style="white-space:nowrap">+ New</button>
+      </div>
+      <div id="sessions-list" class="sessions-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- AGENT SESSIONS MODAL -->
+<div id="agent-sessions-modal" class="modal-bg hidden">
+  <div class="modal-box md">
+    <div class="modal-head"><span>Agent Sessions</span>
+      <button class="ib sm modal-x" data-target="agent-sessions-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div id="agent-sessions-list" class="sessions-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES PANEL MODAL -->
+<div id="features-panel-modal" class="modal-bg hidden">
+  <div class="modal-box md">
+    <div class="modal-head">
+      <span>Features Panel</span>
+      <button class="ib sm modal-x" data-target="features-panel-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-p" style="color:var(--tx1);font-size:11px;margin-bottom:12px">Toggle features on or off. Disabled features are hidden from the UI. Changes apply instantly.</p>
+
+      <div class="fp-group">
+        <div class="fp-group-title">AI Tools Panel</div>
+        <label class="fp-row"><span>AI Tools quick-action buttons (in chat)</span><input type="checkbox" id="fp-ai-tools" checked onchange="FeaturesPanel.toggle('ai-tools',this.checked)"></label>
+        <label class="fp-row"><span>AI Explain code</span><input type="checkbox" id="fp-explain" checked onchange="FeaturesPanel.toggle('explain',this.checked)"></label>
+        <label class="fp-row"><span>AI Refactor code</span><input type="checkbox" id="fp-refactor" checked onchange="FeaturesPanel.toggle('refactor',this.checked)"></label>
+        <label class="fp-row"><span>AI Fix Bugs</span><input type="checkbox" id="fp-fixbugs" checked onchange="FeaturesPanel.toggle('fixbugs',this.checked)"></label>
+        <label class="fp-row"><span>AI Optimize</span><input type="checkbox" id="fp-optimize" checked onchange="FeaturesPanel.toggle('optimize',this.checked)"></label>
+        <label class="fp-row"><span>AI Add Docs/Comments</span><input type="checkbox" id="fp-adddocs" checked onchange="FeaturesPanel.toggle('adddocs',this.checked)"></label>
+        <label class="fp-row"><span>AI Generate Tests</span><input type="checkbox" id="fp-gentests" checked onchange="FeaturesPanel.toggle('gentests',this.checked)"></label>
+        <label class="fp-row"><span>AI Translate code</span><input type="checkbox" id="fp-translate" checked onchange="FeaturesPanel.toggle('translate',this.checked)"></label>
+        <label class="fp-row"><span>Token counter</span><input type="checkbox" id="fp-tokens" checked onchange="FeaturesPanel.toggle('tokens',this.checked)"></label>
+      </div>
+
+      <div class="fp-group">
+        <div class="fp-group-title">Topbar Buttons</div>
+        <label class="fp-row"><span>Model Health Check button</span><input type="checkbox" id="fp-health" checked onchange="FeaturesPanel.toggle('health',this.checked)"></label>
+        <label class="fp-row"><span>Chat Sessions button</span><input type="checkbox" id="fp-sessions" checked onchange="FeaturesPanel.toggle('sessions',this.checked)"></label>
+        <label class="fp-row"><span>Live Preview button</span><input type="checkbox" id="fp-preview" checked onchange="FeaturesPanel.toggle('preview',this.checked)"></label>
+        <label class="fp-row"><span>Upload Asset button</span><input type="checkbox" id="fp-asset" checked onchange="FeaturesPanel.toggle('asset',this.checked)"></label>
+        <label class="fp-row"><span>Run button</span><input type="checkbox" id="fp-run" checked onchange="FeaturesPanel.toggle('run',this.checked)"></label>
+      </div>
+
+      <div class="fp-group">
+        <div class="fp-group-title">Editor Features</div>
+        <label class="fp-row"><span>Terminal panel</span><input type="checkbox" id="fp-terminal" checked onchange="FeaturesPanel.toggle('terminal',this.checked)"></label>
+        <label class="fp-row"><span>Diff viewer (after AI edits)</span><input type="checkbox" id="fp-diff" checked onchange="FeaturesPanel.toggle('diff',this.checked)"></label>
+        <label class="fp-row"><span>Snapshot history (undo AI changes)</span><input type="checkbox" id="fp-snapshot" checked onchange="FeaturesPanel.toggle('snapshot',this.checked)"></label>
+        <label class="fp-row"><span>Find &amp; Replace across files</span><input type="checkbox" id="fp-findreplace" checked onchange="FeaturesPanel.toggle('findreplace',this.checked)"></label>
+      </div>
+
+      <div class="fp-group">
+        <div class="fp-group-title">Mobile</div>
+        <label class="fp-row"><span>Auto-rotate screen</span><input type="checkbox" id="fp-autorotate" onchange="RotateMgr.setAuto(this.checked)"></label>
+        <label class="fp-row"><span>Large touch icons on mobile</span><input type="checkbox" id="fp-bigicons" checked onchange="FeaturesPanel.toggle('bigicons',this.checked)"></label>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:14px">
+        <button class="btn-p" onclick="FeaturesPanel.enableAll()">Enable All</button>
+        <button class="btn-s" onclick="FeaturesPanel.disableAll()">Disable All</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SKILLS MODAL -->
+<div id="skills-modal" class="modal-bg hidden">
+  <div class="modal-box md">
+    <div class="modal-head">
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:-2px"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Skills
+      </span>
+      <button class="ib sm modal-x" data-target="skills-modal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" style="padding:0">
+
+      <!-- Info banner -->
+      <div class="sk-info-banner">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Activate a skill to inject expert instructions into every AI request. Type <code>@skill_name</code> in chat to activate via mention.
+      </div>
+
+      <!-- Skills list -->
+      <div id="skills-list" class="sk-list"></div>
+
+      <!-- Create custom skill form -->
+      <div id="sk-custom-form" class="sk-custom-form">
+        <div class="sk-custom-form-title">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Create Custom Skill
+        </div>
+        <div class="field">
+          <label>Skill Name</label>
+          <input id="sk-custom-name" class="inp" type="text" placeholder="e.g. Python Expert" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field">
+          <label>Instructions <span style="color:var(--tx2);font-weight:400">(tell the AI how to behave when this skill is active)</span></label>
+          <textarea id="sk-custom-instructions" class="inp" rows="5" placeholder="You are a Python expert who...\n\n1. Always use type hints\n2. Write docstrings for all functions\n3. ..." style="resize:vertical;font-family:var(--mono);font-size:12px"></textarea>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="btn-p" id="sk-custom-save" style="flex:1">Save Skill</button>
+          <button class="btn-s" id="sk-custom-cancel">Cancel</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- AGENTS TOKEN WARNING MODAL -->
+<div id="agents-warning-modal" class="modal-bg hidden">
+  <div class="modal-box sm" style="max-width:420px">
+    <div class="modal-head">
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:-2px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Token Usage Warning
+      </span>
+    </div>
+    <div class="modal-body">
+      <p style="margin:0 0 10px;color:var(--tx1);font-size:13px;line-height:1.5">
+        Multi-agent collaboration routes multiple prompts through <strong>free OpenRouter models</strong>.
+        Each agent call consumes tokens from your free-tier limit (typically 60 requests/min, ~200k tokens/day).
+        A full pipeline of 4 agents may use <strong>10k–50k tokens</strong> per task.
+      </p>
+      <p style="margin:0 0 14px;color:var(--tx2);font-size:12px;line-height:1.5">
+        You can configure which free models each agent uses in the gear icon (top-right of the agents panel).
+        If a model is rate-limited or down, agents auto-fallback to another free model.
+      </p>
+      <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--tx1);cursor:pointer">
+        <input type="checkbox" id="agents-warning-dismiss">
+        Don't show this warning again
+      </label>
+      <button class="btn-p" id="agents-warning-ok" style="width:100%;margin-top:12px">Got it — Enable Agents</button>
+    </div>
+  </div>
+</div>
+
+<!-- AGENTS CONFIG MODAL -->
+<div id="agents-config-modal" class="modal-bg hidden">
+  <div class="modal-box md">
+    <div class="modal-head">
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;vertical-align:-2px"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Agent Models
+      </span>
+      <button class="ib sm modal-x" data-target="agents-config-modal">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="agents-config-body"></div>
+    <div style="padding:8px 12px;border-top:1px solid var(--bd)">
+      <button class="btn-p" onclick="AgentsMgr._saveConfig()" style="width:100%">Save Agent Models</button>
+    </div>
+  </div>
+</div>
+
+  <!-- HIDDEN TOOLBAR BUTTONS (referenced by JS, kept for onclick/event handler compatibility) -->
+  <div style="display:none">
+    <button id="btn-settings"></button>
+    <button id="btn-export"></button>
+    <button id="btn-import"></button>
+    <button id="btn-preview"></button>
+    <button id="btn-agents"></button>
+    <button id="btn-fullscreen">
+      <svg id="fs-icon-enter" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+      <svg id="fs-icon-exit" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+    </button>
+    <button id="btn-term-clear"></button>
+    <button id="btn-term-toggle"></button>
+    <button id="btn-do-asset-import"></button>
+    <button id="btn-model-health"></button>
+    <button id="btn-upload-asset"></button>
+    <button id="btn-upload-asset-chat"></button>
+    <button id="btn-git-toggle"></button>
+    <button id="btn-git-term"></button>
+    <button id="btn-rotate"></button>
+    <button id="btn-open-project-mgr"></button>
+    <button id="btn-sidebar-toggle"></button>
+    <div id="chat-body"></div>
+    <div id="cmd-bg"></div>
+  </div>
+
+  <!-- MODEL PICKER DROPDOWN (global, positioned above everything) -->
+<div class="model-picker-dropdown hidden" id="model-picker-dropdown">
+  <div class="mpd-search-row">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="mpd-search" class="mpd-search-input" placeholder="Search models or providers..." autocomplete="off" spellcheck="false">
+  </div>
+  <div class="mpd-groups" id="mpd-groups">
+    <!-- Populated dynamically by ModelPicker.refreshProviderModels() —
+         one group per provider that has an API key set, each listing
+         that provider's known/fetched models. -->
+  </div>
+  <div class="mpd-divider"></div>
+  <div class="mpd-section-title">
+    Custom Model
+    <span class="mpd-hint">provider/model-name:tag</span>
+  </div>
+  <div class="mpd-custom-row">
+    <input class="mpd-custom-input" id="mpd-custom-input" type="text" placeholder="e.g. openai/gpt-5.5" autocomplete="off" spellcheck="false">
+    <button class="mpd-custom-apply" id="mpd-custom-apply">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    </button>
+  </div>
+  <div class="mpd-custom-feedback" id="mpd-custom-hint"></div>
+  <div class="mpd-divider"></div>
+  <div class="mpd-custom-row" style="padding:6px 8px">
+    <button class="mpd-custom-apply" id="mpd-manage-providers" style="width:100%;background:transparent;border:1px solid var(--bd2);color:var(--tx1);font-size:11px;padding:6px;border-radius:var(--r2);gap:4px;display:flex;align-items:center;justify-content:center">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Manage Providers
+    </button>
+  </div>
+</div>
+
+<!-- ===== FEATURE HUB ===== -->
+<div class="modal-bg hidden" id="feature-hub-bg" onclick="if(event.target===this)FeatureHub.close()">
+  <div class="modal-box md">
+    <div class="modal-head">
+      <span>Feature Hub</span>
+      <button class="modal-x ib sm" onclick="FeatureHub.close()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" style="padding:12px">
+      <div class="fh-grid" id="fh-grid">
+        <button class="fh-item" onclick="FeatureHub.close();ActivityBar.show('explorer')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          <span class="fh-label">File Explorer</span>
+          <span class="fh-desc">Browse and manage project files</span>
+        </button>
+        <button class="fh-item" onclick="FeatureHub.close();ActivityBar.toggleAI()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+          <span class="fh-label">AI Chat</span>
+          <span class="fh-desc">Chat with AI assistant (Ctrl+L)</span>
+        </button>
+        <button class="fh-item" onclick="FeatureHub.close();ActivityBar.toggleAgents()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span class="fh-label">AI Agents</span>
+          <span class="fh-desc">Multi-agent collaboration workflow</span>
+        </button>
+        <button class="fh-item" onclick="FeatureHub.close();ActivityBar.toggleTerminal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          <span class="fh-label">Terminal</span>
+          <span class="fh-desc">Shell terminal & Git commands (Ctrl+`)</span>
+        </button>
+        <button class="fh-item" onclick="FeatureHub.close();LivePreview.open()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="fh-label">Live Preview</span>
+          <span class="fh-desc">Preview your project in real-time</span>
+        </button>
+        <button class="fh-item" onclick="FeatureHub.close();ImportMgr.openFilePicker()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <span class="fh-label">Import ZIP</span>
+          <span class="fh-desc">Import project from ZIP file</span>
+        </button>
+        <button class="fh-item" onclick="FeatureHub.close();ExportMgr.downloadZip()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span class="fh-label">Export ZIP</span>
+          <span class="fh-desc">Download project as ZIP archive</span>
+        </button>
+        <button class="fh-item" onclick="FeatureHub.close();SkillsMgr.open()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span class="fh-label">Skills</span>
+          <span class="fh-desc">AI behavior presets & @mentions</span>
+        </button>
+        <button class="fh-item" onclick="FeatureHub.close();SnippetsMgr.open()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          <span class="fh-label">Snippets</span>
+          <span class="fh-desc">Code snippets library</span>
+        </button>
+        <button class="fh-item" onclick="FeatureHub.close();ChatSessions.open()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span class="fh-label">Chat Sessions</span>
+          <span class="fh-desc">Manage your AI chat history</span>
+        </button>
+        <button class="fh-item" onclick="FeatureHub.close();openModal('find-replace-modal')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span class="fh-label">Find & Replace</span>
+          <span class="fh-desc">Search across all project files</span>
+        </button>
+        <button class="fh-item" onclick="FeatureHub.close();ImageAPI.pick('nature')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span class="fh-label">Image Picker</span>
+          <span class="fh-desc">Free stock photo library</span>
+        </button>
+        <button class="fh-item" onclick="FeatureHub.close();openModal('snippets-modal')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span class="fh-label">All Snippets</span>
+          <span class="fh-desc">Browse snippet library</span>
+        </button>
+        <button class="fh-item" onclick="FeatureHub.close();CommandPalette.open()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          <span class="fh-label">Command Palette</span>
+          <span class="fh-desc">Quick actions (Ctrl+Shift+P)</span>
+        </button>
+        <button class="fh-item" onclick="FeatureHub.close();SettingsMgr.load();openModal('settings-modal')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span class="fh-label">Settings</span>
+          <span class="fh-desc">API keys, providers, preferences</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JS Libraries -->
+<script src="vendor/xterm/xterm.min.js"></script>
+<script src="vendor/xterm/addon-fit/xterm-addon-fit.min.js"></script>
+<script src="vendor/monaco-editor/min/vs/loader.min.js"></script>
+<!-- App Scripts -->
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/providers.js"></script>
+<script src="js/sidebar-position.js"></script>
+<script src="js/global-search.js"></script>
+<script src="js/git-mgr.js"></script>
+<script src="js/resizer.js"></script>
+<script src="js/filetree.js"></script>
+<script src="js/snippets.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/terminal.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/skills.js"></script>
+<script src="js/preview.js"></script>
+<script src="js/cmdpalette.js"></script>
+<script src="js/quickopen.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/voice.js"></script>
+<script src="js/gitdiff.js"></script>
+<script src="js/aicompletions.js"></script>
+<script src="js/spliteditor.js"></script>
+<script src="js/aicodeactions.js"></script>
+<script src="js/aiterminal.js"></script>
+<script src="js/aireview.js"></script>
+<script src="js/aiexplain.js"></script>
+<script src="js/aicommit.js"></script>
+  <script src="js/airefactor.js"></script>
+  <script src="js/ainline.js"></script>
+<script src="js/favorites.js"></script>
+<script src="js/shortcuts.js"></script>
+<script src="js/snippetsmgr.js"></script>
+<script src="js/fileicons.js"></script>
+<script src="js/breadcrumb.js"></script>
+<script src="js/autosave-indicator.js"></script>
+<script src="js/voicecommands.js"></script>
+<script src="js/termthemes.js"></script>
+<script src="js/media.js"></script>
+<script src="js/vibe.js"></script>
+<script src="js/features.js"></script>
+<script src="js/imageapi.js"></script>
+<script src="js/agents.js"></script>
+<script src="js/app.js"></script>
+  <script src="js/orin_patches.js"></script>
+  <script src="js/orin_extras.js"></script>
+<!-- AGENTS WARNING MODAL -->
+<div class="modal-overlay hidden" id="agent-warn-modal">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-header">
+      <span class="modal-title" style="display:flex;align-items:center;gap:8px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--yw)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        API Usage Warning
+      </span>
+      <button class="modal-x" onclick="closeModal('agent-warn-modal')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div style="padding:16px 20px;color:var(--tx1);font-size:13px;line-height:1.6">
+      <p style="margin:0 0 12px"><strong>AI Agent mode can cause heavy usage of your API keys.</strong></p>
+      <p style="margin:0 0 12px;color:var(--tx2)">Agents run multiple LLM calls autonomously — creating files, running terminal commands, and iterating on code without asking for confirmation each step. This may result in significant token consumption and API costs.</p>
+      <p style="margin:0;color:var(--tx2)">Only proceed if you understand the risks and have set usage limits with your provider.</p>
+    </div>
+    <div style="padding:0 20px 16px;display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn-s" onclick="closeModal('agent-warn-modal')">Cancel</button>
+      <button class="btn-p" onclick="closeModal('agent-warn-modal');ActivityBar.toggleAgents();localStorage.setItem('agentWarnSeen','1')">I Understand — Open Agents</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

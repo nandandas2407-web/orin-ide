@@ -1,0 +1,193 @@
+/* ============================================================
+   MOBILE RESPONSIVE — unified mob-active class
+   ============================================================ */
+@media (max-width: 768px) {
+  :root {
+    --sidebar-w: 100vw;
+    --chat-w: 100vw;
+    --ab-w: 0px;
+    --bp-h: 100%;
+  }
+  .mob-topbar { display: flex; }
+  .mob-tabs { display: flex; }
+  #mob-fab { display: block; }
+  .activity-bar { display: none; }
+
+  /* All panels hidden by default, shown with mob-active */
+  .sidebar, .sidebar-view { display: none; width: 100vw; }
+  .sidebar.mob-active, .sidebar-view.mob-active { display: flex; }
+  .chat-panel { display: none; width: 100vw; }
+  .chat-panel.mob-active { display: flex; }
+  .agents-panel { display: none; width: 100vw; }
+  .agents-panel.mob-active { display: flex; }
+  .center { display: none; }
+  .center.mob-active { display: flex; }
+  .rz { display: none; }
+  .tab-bar-right .ib:not(.visible-mobile) { display: none; }
+
+  /* Panel position is a desktop-only preference */
+  #layout-main { flex-direction: column !important; }
+  #layout-main .sidebar,
+  #layout-main .sidebar-view {
+    width: 100vw !important; height: 100% !important;
+    display: none;
+  }
+  #layout-main .sidebar.mob-active, #layout-main .sidebar-view.mob-active { display: flex !important; }
+  #layout-main[data-chat-pos] .chat-panel,
+  #layout-main[data-chat-pos] .agents-panel,
+  #layout-main[data-chat-pos] #rz-chat,
+  #layout-main[data-chat-pos] #rz-agents { order: initial; border-left: none; border-right: none; }
+
+  /* Bottom panel — full height on mobile */
+  .bottom-panel {
+    position: absolute !important; inset: 0 !important;
+    width: 100% !important; height: 100% !important;
+    max-height: 100% !important;
+    z-index: 50;
+  }
+  .bottom-panel.collapsed { display: none !important; }
+
+  /* Agents panel — ensure input is always visible */
+  .agents-panel .agents-input-wrap { flex-shrink: 0; }
+  .agents-panel .agents-messages { flex: 1; min-height: 0; overflow-y: auto; }
+
+  /* Chat panel — ensure input is always visible */
+  .chat-panel .chat-input-wrap { flex-shrink: 0; }
+  .chat-panel .chat-messages { flex: 1; min-height: 0; overflow-y: auto; }
+
+  /* Terminal — full height on mobile */
+  .term-body { flex: 1; min-height: 0; }
+  .term-input-row { flex-shrink: 0; }
+
+  /* Modal sizing */
+  .modal-box { max-width: 95vw; max-height: 85vh; border-radius: var(--r); }
+
+  /* Tab bar mobile adjustments */
+  .tab-bar { overflow-x: auto; scrollbar-width: none; }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab { font-size: 11px; padding: 0 8px; max-width: 120px; }
+
+  /* Startup panel mobile */
+  .startup-panel { padding: 12px; }
+  .startup-inner { padding: 20px 16px; max-width: 100%; }
+
+  /* Chat mode bar scrollable */
+  .chat-mode-bar { overflow-x: auto; scrollbar-width: none; }
+  .chat-mode-bar::-webkit-scrollbar { display: none; }
+
+  /* File tree mobile padding */
+  .tree-item { padding: 4px 8px 4px 16px; min-height: 32px; }
+
+  /* Settings modal mobile */
+  .modal-box.settings-box { width: 100vw; max-width: 100vw; height: 100vh; max-height: 100vh; border-radius: 0; }
+  .modal-box.settings-box .modal-body { padding: 12px; }
+
+  /* Chat hints wrap */
+  .chat-hints { overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; }
+  .chat-hints::-webkit-scrollbar { display: none; }
+}
+
+@media (max-width: 480px) {
+  .fh-grid { grid-template-columns: repeat(3, 1fr); }
+  .welcome-actions { flex-direction: column; }
+  .modal-box { border-radius: var(--r2); }
+  .msg-body { font-size: 11px; }
+  .chat-input { font-size: 11px; padding: 6px 8px; }
+  .chat-row { padding: 4px 8px 6px; }
+  .chat-messages { padding: 8px; gap: 8px; }
+  .tree-item { font-size: 11px; }
+  .sb-header { font-size: 10px; }
+}
+
+/* Smooth panel transitions on all screens */
+.sidebar, .sidebar-view, .chat-panel, .agents-panel, .center {
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+/* Touch-friendly hit targets on mobile */
+@media (pointer: coarse) {
+  .ab-btn { width: 40px; height: 40px; }
+  .tree-item { min-height: 36px; }
+  .chat-tool-btn { padding: 6px 12px; }
+  .mode-btn { padding: 6px 14px; }
+  .hint { padding: 6px 12px; }
+  .tab-close { width: 24px; height: 24px; }
+  .msg-action-btn { padding: 8px 14px; }
+  .apply-btn { padding: 8px 16px; }
+  .continue-btn { padding: 8px 18px; }
+  .mob-tab { min-height: 48px; }
+  .cia-btn { width: 36px; height: 36px; }
+  .bp-tab { padding: 8px 14px; }
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  /* Better chat input on mobile */
+  .chat-input {
+    min-height: 44px;
+    font-size: 16px; /* Prevent iOS zoom on focus */
+  }
+
+  /* Better modal experience */
+  .modal-body {
+    padding: 12px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Better file tree on mobile */
+  .tree-item {
+    padding-left: 20px;
+  }
+
+  /* Better toast on mobile */
+  .toast {
+    max-width: 90vw;
+    font-size: 12px;
+    padding: 10px 14px;
+  }
+
+  /* Better apply bar on mobile */
+  .apply-bar {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  /* Better git panel on mobile */
+  .git-cmd-input-row {
+    flex-wrap: wrap;
+  }
+
+  /* Hide non-essential elements on small screens */
+  .msg-usage {
+    display: none;
+  }
+
+  /* Better code blocks on mobile */
+  .msg-body pre {
+    font-size: 11px;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Landscape mode adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+  .mob-topbar {
+    height: 36px;
+  }
+  .mob-tabs {
+    height: 44px;
+  }
+  .chat-input {
+    min-height: 36px;
+  }
+}
+
+/* iPad/tablet specific */
+@media (min-width: 769px) and (max-width: 1024px) {
+  :root {
+    --sidebar-w: 280px;
+    --chat-w: 340px;
+  }
+}

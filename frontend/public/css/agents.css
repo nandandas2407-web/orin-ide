@@ -1,0 +1,330 @@
+/* ============================================================
+   AGENTS PANEL — purple theme
+   ============================================================ */
+.agents-panel {
+  /* Width intentionally not set here — owned by main.css via
+     `width: var(--chat-w)` (see chat.css for the matching fix and
+     full explanation of why an unconditional width:100% here was
+     silently overriding the responsive breakpoint value). */
+  flex-direction: column; overflow: hidden; background: var(--bg1); min-height: 0;
+}
+
+.agents-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 8px 0 12px; border-bottom: 1px solid var(--bd);
+  min-height: 36px; flex-shrink: 0;
+  background: linear-gradient(180deg, var(--bg2) 0%, var(--bg1) 100%);
+}
+.agents-title { font-size: 10px; font-weight: 700; color: var(--tx2); text-transform: uppercase; letter-spacing: .8px; }
+.agents-header-right { display: flex; gap: 3px; align-items: center; }
+
+/* Config row */
+.agents-config-row {
+  display: flex; flex-wrap: wrap; gap: 4px; padding: 6px 8px;
+  border-bottom: 1px solid var(--bd); flex-shrink: 0; min-height: 36px; align-items: center;
+}
+.agent-chip {
+  display: flex; align-items: center; gap: 4px; padding: 3px 8px;
+  background: var(--bg2); border: 1px solid var(--bd); border-radius: var(--r-pill);
+  font-size: 10px; color: var(--tx2); cursor: pointer; transition: all var(--tr-fast);
+}
+.agent-chip:hover { border-color: var(--bd2); color: var(--tx0); transform: translateY(-1px); }
+.agent-chip.enabled { background: rgba(157,92,255,.08); border-color: rgba(157,92,255,.25); color: var(--ac3); }
+.agent-chip-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+/* Agent slot (config row item) */
+.agent-slot {
+  display: flex; align-items: center; gap: 5px; padding: 4px 8px;
+  background: var(--bg2); border: 1px solid var(--bd); border-radius: var(--r-pill);
+  font-size: 10px; color: var(--tx2); cursor: pointer; transition: all var(--tr);
+}
+.agent-slot:hover { border-color: var(--bd2); color: var(--tx0); background: var(--bg3); transform: translateY(-1px); }
+.agent-slot-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.agent-slot-name { font-weight: 600; color: var(--tx1); }
+.agent-slot-model { color: var(--tx3); font-family: var(--mono); font-size: 9px; }
+
+/* Agent model picker (dropdown) */
+.agent-model-picker {
+  position: fixed; background: var(--bg1); border: 1px solid var(--bd2);
+  border-radius: var(--r); z-index: 10000; overflow: hidden; min-width: 160px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.6); animation: slideUp .1s ease;
+}
+.agent-model-opt {
+  display: block; width: 100%; padding: 7px 10px; background: transparent;
+  border: none; color: var(--tx1); font-size: 11px; font-family: var(--font);
+  text-align: left; cursor: pointer; transition: all var(--tr-fast);
+}
+.agent-model-opt:hover { background: var(--ac-glow); color: var(--tx0); }
+.agent-model-opt.active { color: var(--ac3); background: rgba(157,92,255,.08); }
+
+/* Task phases strip */
+.agents-task-phases {
+  display: none; align-items: center; gap: 6px; padding: 5px 10px;
+  border-bottom: 1px solid var(--bd); flex-shrink: 0;
+  background: rgba(157,92,255,.03);
+}
+.agents-task-phases.visible { display: flex; }
+.phase-btn {
+  display: flex; align-items: center; gap: 5px; padding: 3px 9px;
+  background: transparent; border: 1px solid var(--bd); border-radius: var(--r-pill);
+  font-size: 10px; color: var(--tx2); cursor: pointer; transition: all var(--tr-fast);
+}
+.phase-btn.active { color: var(--ac3); border-color: rgba(157,92,255,.35); background: rgba(157,92,255,.08); }
+.phase-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+/* Status bar */
+.agents-status-bar {
+  display: flex; align-items: center; gap: 6px; padding: 5px 10px;
+  border-bottom: 1px solid var(--bd); font-size: 11px; color: var(--tx2); flex-shrink: 0;
+}
+.agents-status-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--tx3); flex-shrink: 0;
+}
+.agents-status-dot.thinking { background: var(--cy); animation: statusPulse .8s ease infinite; }
+.agents-status-dot.running { background: var(--ac); animation: statusPulse .6s ease infinite; }
+.agents-status-dot.done { background: var(--gr); }
+.agents-status-dot.error { background: var(--rd); }
+@keyframes statusPulse { 0%,100% { opacity:.5 } 50% { opacity:1 } }
+.agents-status-label { color: var(--tx2); }
+
+/* Messages */
+.agents-messages {
+  flex: 1; overflow: auto; padding: 10px; display: flex; flex-direction: column; gap: 8px; min-height: 0;
+}
+.agent-msg {
+  display: flex; flex-direction: row; gap: 8px;
+  background: var(--bg2); border: 1px solid var(--bd); border-radius: var(--r);
+  padding: 8px 10px; animation: slideUp .2s ease;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.agent-msg:hover { 
+  border-color: var(--bd2);
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+.agent-msg.user { flex-direction: row-reverse; }
+.agent-avatar {
+  width: 24px; height: 24px; border-radius: var(--r2); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: var(--tx2); background: var(--bg3);
+}
+.agent-avatar.architect { background: rgba(201,166,255,.15); color: #c9a6ff; }
+.agent-avatar.coder { background: rgba(74,222,128,.15); color: #4ade80; }
+.agent-avatar.reviewer { background: rgba(251,191,36,.15); color: #fbbf24; }
+.agent-avatar.integrator { background: rgba(96,165,250,.15); color: #60a5fa; }
+.agent-avatar.user { background: var(--bg3); color: var(--tx1); }
+.agent-body { flex: 1; min-width: 0; }
+.agent-role-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+  margin-bottom: 3px;
+}
+.agent-role-label.architect { color: #c9a6ff; }
+.agent-role-label.coder { color: #4ade80; }
+.agent-role-label.reviewer { color: #fbbf24; }
+.agent-role-label.integrator { color: #60a5fa; }
+.agent-body-content { font-size: 12px; color: var(--tx1); line-height: 1.5; }
+.agent-body-content pre {
+  background: var(--bg0); border: 1px solid var(--bd); border-radius: var(--r2);
+  padding: 8px; overflow-x: auto; font-family: var(--mono); font-size: 11px; margin: 4px 0;
+}
+.agent-body-content code {
+  font-family: var(--mono); font-size: 11px; background: var(--bg3);
+  border: 1px solid var(--bd); border-radius: 3px; padding: 1px 4px; color: var(--ac3);
+}
+.agent-body-content pre code { background: none; border: none; padding: 0; color: var(--tx0); }
+.agent-thinking { display: flex; align-items: center; gap: 4px; padding: 4px 0; }
+.tdot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--ac);
+  animation: thinkPulse .8s ease infinite; opacity: .4;
+}
+.tdot:nth-child(2) { animation-delay: .15s; }
+.tdot:nth-child(3) { animation-delay: .3s; }
+.cb-header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
+  padding: 5px 10px; background: var(--bg3); border: 1px solid var(--bd);
+  border-bottom: none; border-radius: var(--r2) var(--r2) 0 0; font-size: 10.5px;
+}
+.cb-header-left {
+  display: flex; align-items: center; gap: 6px;
+  flex: 1; min-width: 0; overflow: hidden;
+}
+.cb-header-right {
+  display: flex; align-items: center; gap: 4px;
+  flex-shrink: 0;
+}
+.cb-lang { color: var(--ac3); font-weight: 700; font-family: var(--mono); flex-shrink: 0; }
+.cb-path {
+  color: var(--tx3); font-family: var(--mono);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.cb-streaming {
+  color: var(--yw); font-size: 10px; opacity: .7; animation: pulse 1s infinite;
+}
+.cb-copy {
+  background: rgba(157,92,255,.1); border: 1px solid rgba(157,92,255,.2);
+  color: var(--tx2); border-radius: 4px; font-size: 10px; padding: 2px 7px;
+  cursor: pointer; font-family: var(--font); transition: all .12s; flex-shrink: 0;
+  white-space: nowrap;
+}
+.cb-copy:hover { background: rgba(157,92,255,.2); color: var(--ac3); border-color: var(--ac); }
+.cb-preview-html {
+  background: rgba(34,197,94,.1); border-color: rgba(34,197,94,.2); color: #4ade80;
+}
+.cb-preview-html:hover { background: rgba(34,197,94,.2); border-color: #4ade80; color: #86efac; }
+.cb-pre {
+  background: var(--bg0); border: 1px solid var(--bd); border-radius: var(--r);
+  margin: 8px 0; overflow: hidden;
+}
+.cb-code {
+  display: block; padding: 10px 12px; overflow-x: auto;
+  font-family: var(--mono); font-size: 12px; line-height: 1.6;
+  color: var(--tx1); white-space: pre;
+}
+
+/* Welcome screen */
+.agents-welcome {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; text-align: center; padding: 20px; animation: fadeIn .3s ease;
+}
+.agents-welcome-icon { color: var(--ac); margin-bottom: 10px; filter: drop-shadow(0 0 12px rgba(157,92,255,.3)); }
+.agents-welcome-icon svg { display: block; }
+.agents-welcome-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+.agents-welcome-desc { font-size: 11px; color: var(--tx2); line-height: 1.6; max-width: 280px; margin-bottom: 14px; }
+.agents-welcome-roles { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.agents-welcome-role {
+  display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px;
+  background: var(--bg2); border: 1px solid var(--bd); border-radius: var(--r-pill);
+  font-size: 10px; color: var(--tx2); font-weight: 500;
+}
+.agents-welcome-role.architect { color: #c9a6ff; border-color: rgba(201,166,255,.3); }
+.agents-welcome-role.coder { color: #4ade80; border-color: rgba(74,222,128,.3); }
+.agents-welcome-role.reviewer { color: #fbbf24; border-color: rgba(251,191,36,.3); }
+.agents-welcome-role.integrator { color: #60a5fa; border-color: rgba(96,165,250,.3); }
+
+/* Apply bar */
+.agents-apply-bar,
+.apply-bar {
+  display: none; align-items: center; gap: 4px; padding: 6px 8px;
+  border-top: 1px solid var(--bd); flex-shrink: 0; background: var(--bg0);
+}
+.agents-apply-bar:not(.hidden),
+.apply-bar:not(.hidden) { display: flex; }
+.apply-btn {
+  display: flex; align-items: center; gap: 4px; padding: 5px 10px;
+  border: 1px solid var(--bd); background: var(--bg2); color: var(--tx1);
+  border-radius: var(--r2); font-size: 11px; font-family: var(--font);
+  cursor: pointer; transition: all var(--tr); white-space: nowrap;
+}
+.apply-btn:hover { background: var(--bg3); border-color: var(--bd2); color: var(--tx0); }
+.apply-btn.primary { background: linear-gradient(135deg, var(--ac), var(--ac2)); border-color: var(--ac); color: #fff; }
+.apply-btn.primary:hover { box-shadow: 0 2px 12px rgba(157,92,255,.3); }
+
+/* Command runner */
+.agents-cmd-header {
+  display: flex; align-items: center; gap: 6px; padding: 6px 8px;
+  border-bottom: 1px solid var(--bd); font-size: 11px; color: var(--tx1);
+  font-weight: 600; background: var(--bg2);
+}
+.agents-cmd-list { max-height: 150px; overflow-y: auto; }
+.agent-cmd-row {
+  display: flex; align-items: center; gap: 6px; padding: 4px 8px;
+  border-bottom: 1px solid var(--bd); font-size: 11px;
+}
+.agent-cmd-row:last-child { border-bottom: none; }
+.agent-cmd-prefix { color: var(--ac); font-weight: bold; font-family: var(--font-mono); }
+.agent-cmd-row code { flex: 1; color: var(--tx0); font-family: var(--font-mono); font-size: 11px; word-break: break-all; }
+.agent-cmd-run {
+  padding: 2px 8px; border: 1px solid var(--bd); background: var(--bg2);
+  color: var(--tx1); border-radius: var(--r2); font-size: 10px; cursor: pointer;
+  font-family: var(--font); transition: all var(--tr); white-space: nowrap;
+}
+.agent-cmd-run:hover { background: linear-gradient(135deg, var(--ac), var(--ac2)); border-color: var(--ac); color: #fff; }
+
+/* Input area */
+.agents-input-wrap { border-top: 1px solid var(--bd); flex-shrink: 0; padding: 8px; background: var(--bg0); }
+.agents-row { display: flex; align-items: flex-end; gap: 6px; }
+.agents-input {
+  flex: 1; background: var(--bg2); border: 1px solid var(--bd); color: var(--tx0);
+  border-radius: var(--r); padding: 8px 10px; font-size: 12px; font-family: var(--font);
+  resize: none; outline: none; transition: border-color var(--tr);
+}
+.agents-input:focus { border-color: var(--ac); box-shadow: 0 0 0 2px rgba(157,92,255,.1); }
+.agents-input:disabled { opacity: .5; }
+.agents-send-btn {
+  width: 34px; height: 34px; background: linear-gradient(135deg, var(--ac), var(--ac2)); border: none; border-radius: var(--r);
+  color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: all var(--tr); flex-shrink: 0;
+}
+.agents-send-btn:hover:not(:disabled) { box-shadow: 0 2px 12px rgba(157,92,255,.3); transform: scale(1.05); }
+.agents-send-btn:active:not(:disabled) { transform: scale(0.95); }
+.agents-send-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* Agents input enhanced focus */
+.agents-input:focus {
+  border-color: var(--ac);
+  box-shadow: 0 0 0 3px rgba(157,92,255,.1), 0 2px 8px rgba(157,92,255,.06);
+}
+
+/* Agent command run button enhanced */
+.agent-cmd-run {
+  position: relative;
+  overflow: hidden;
+}
+.agent-cmd-run::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.1), transparent);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .15s ease;
+}
+.agent-cmd-run:hover::after {
+  opacity: 1;
+}
+
+/* Agent message code blocks */
+.agent-body-content pre {
+  position: relative;
+}
+.agent-body-content pre::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(157,92,255,.2), transparent);
+}
+
+/* Agent welcome roles hover */
+.agents-welcome-role {
+  transition: all .15s ease;
+}
+.agents-welcome-role:hover {
+  transform: translateY(-1px);
+}
+
+/* Agent status bar enhanced */
+.agents-status-bar {
+  background: linear-gradient(180deg, var(--bg1), rgba(14,14,20,.98));
+}
+
+/* Agent thinking dots enhanced */
+.agent-thinking .tdot {
+  width: 7px;
+  height: 7px;
+}
+.agents-send-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* Agents warning modal */
+#agents-warning-modal .modal-body p { color: var(--tx1); font-size: 12px; line-height: 1.5; }
+
+/* Config modal */
+.acfg-group { padding: 8px 0; border-bottom: 1px solid var(--bd); }
+.acfg-group:last-child { border-bottom: none; }
+.acfg-row {
+  display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--tx1);
+}
+.acfg-row label { min-width: 80px; font-weight: 500; }
+.acfg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
