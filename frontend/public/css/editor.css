@@ -1,0 +1,298 @@
+/* ============================================================
+   EDITOR — Codient-style dark purple theme
+   ============================================================ */
+.editor-wrap {
+  flex: 1; display: flex; flex-direction: column; min-height: 0;
+  position: relative; overflow: hidden;
+}
+#monaco-host { flex: 1; overflow: hidden; min-height: 0; position: relative; }
+
+.editor-load-error {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 10px; padding: 32px;
+  text-align: center; background: var(--bg0); color: var(--tx2);
+}
+.editor-load-error svg { color: var(--yw); }
+.editor-load-error .ele-title { font-size: 15px; font-weight: 600; color: var(--tx0); }
+.editor-load-error .ele-sub { font-size: 12px; color: var(--tx2); max-width: 320px; line-height: 1.5; }
+.editor-load-error .w-btn { margin-top: 6px; }
+
+/* Tab bar */
+.tab-bar {
+  display: flex; flex-direction: row; align-items: center;
+  background: var(--bg1); border-bottom: 1px solid var(--bd);
+  min-height: 36px; flex-shrink: 0; overflow: hidden;
+}
+.tab-list {
+  display: flex; flex-direction: row; flex: 1; overflow-x: auto; overflow-y: hidden; gap: 0;
+}
+.tab-list::-webkit-scrollbar { height: 2px; background: transparent; }
+.tab-list::-webkit-scrollbar-thumb { background: var(--bd2); border-radius: 1px; }
+
+.tab-item {
+  display: flex; flex-direction: row; align-items: center; gap: 5px;
+  padding: 0 12px; height: 36px; font-size: 11px; color: var(--tx2);
+  border-right: 1px solid var(--bd); cursor: pointer; white-space: nowrap;
+  user-select: none; transition: all var(--tr-fast); flex-shrink: 0;
+  border-bottom: 2px solid transparent; position: relative;
+}
+.tab-item:hover { background: var(--bg2); color: var(--tx0); }
+.tab-item.active {
+  background: var(--bg0); color: var(--tx0);
+  border-bottom-color: var(--ac);
+}
+.tab-item.active::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; background: var(--ac);
+}
+.tab-item.modified { color: var(--yw); }
+
+/* Tab file type icon */
+.tab-icon {
+  width: 14px; height: 14px; display: flex; align-items: center; justify-content: center;
+  font-size: 7px; font-weight: 700; font-family: var(--mono);
+  border-radius: 2px; flex-shrink: 0; line-height: 1;
+}
+.tab-icon[data-ext="js"],.tab-icon[data-ext="jsx"],.tab-icon[data-ext="mjs"],.tab-icon[data-ext="cjs"] {
+  color: #fff; background: #f7df1e;
+}
+.tab-icon[data-ext="ts"],.tab-icon[data-ext="tsx"] {
+  color: #fff; background: #3178c6;
+}
+.tab-icon[data-ext="py"] { color: #fff; background: #3776ab; }
+.tab-icon[data-ext="css"],.tab-icon[data-ext="scss"] {
+  color: #fff; background: #1572b6;
+}
+.tab-icon[data-ext="html"],.tab-icon[data-ext="htm"] {
+  color: #fff; background: #e34f26;
+}
+.tab-icon[data-ext="json"] { color: #fff; background: #f5a623; }
+.tab-icon[data-ext="md"] { color: #fff; background: #9d75d8; }
+.tab-icon[data-ext="svg"] { color: #fff; background: #e37933; }
+.tab-icon[data-ext="vue"] { color: #fff; background: #42b883; }
+
+.tab-close {
+  opacity: 0; width: 16px; height: 16px; display: flex; align-items: center;
+  justify-content: center; border-radius: var(--r2); border: none; background: transparent;
+  color: var(--tx2); cursor: pointer; padding: 0; transition: all var(--tr-fast); flex-shrink: 0;
+}
+.tab-item:hover .tab-close { opacity: 1; }
+.tab-close:hover { 
+  background: rgba(248,113,113,.15); color: var(--rd); opacity: 1; 
+  transform: scale(1.1);
+}
+.tab-close:active { transform: scale(0.9); }
+.tab-bar-right {
+  display: flex; align-items: center; gap: 2px; padding: 0 6px;
+  flex-shrink: 0; border-left: 1px solid var(--bd); height: 100%;
+}
+
+/* Run & Preview button */
+.run-preview-btn {
+  display: flex; align-items: center; gap: 5px; padding: 4px 12px;
+  background: linear-gradient(135deg, rgba(157,92,255,.18), rgba(124,58,237,.12));
+  border: 1px solid rgba(157,92,255,.3); color: var(--ac3);
+  border-radius: var(--r); font-size: 11px; font-weight: 600;
+  font-family: var(--font); cursor: pointer; transition: all var(--tr);
+  white-space: nowrap; letter-spacing: .01em;
+}
+.run-preview-btn:hover {
+  background: linear-gradient(135deg, rgba(157,92,255,.3), rgba(124,58,237,.2));
+  border-color: var(--ac); color: #fff; box-shadow: 0 0 12px rgba(157,92,255,.2);
+  transform: translateY(-1px);
+}
+.run-preview-btn:active { transform: translateY(0); }
+
+/* Welcome screen styles consolidated in main.css to avoid duplicate/conflicting rules */
+
+/* Thinking dots */
+.thinking { display: flex; align-items: center; gap: 5px; padding: 4px 0; }
+.tdot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--ac);
+  animation: tdotPulse .8s ease infinite; opacity: .3;
+  box-shadow: 0 0 6px rgba(157,92,255,.4);
+}
+.tdot:nth-child(2) { animation-delay: .15s; }
+.tdot:nth-child(3) { animation-delay: .3s; }
+@keyframes tdotPulse { 0%,100% { opacity:.3; transform:scale(1) } 50% { opacity:1; transform:scale(1.3) } }
+
+/* Patch preview */
+.pp-file { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 10px; padding: 2px 0; }
+.pp-status { width: 14px; height: 14px; border-radius: var(--r2); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; flex-shrink: 0; }
+.pp-status.add { background: rgba(34,197,94,.15); color: var(--gr); }
+.pp-status.mod { background: rgba(157,92,255,.15); color: var(--ac3); }
+
+/* Token usage line */
+.msg-usage {
+  font-size: 10px; color: var(--tx3); margin-top: 6px; font-family: var(--mono);
+  padding: 3px 6px; background: var(--bg2); border-radius: var(--r2); display: inline-block;
+}
+
+/* AI Fix inline highlight */
+.ai-fix-highlight { background: rgba(157,92,255,.12); outline: 1px solid rgba(157,92,255,.35); }
+
+/* ============================================================
+   MONACO EDITOR — Professional polish
+   ============================================================ */
+
+/* ── Line numbers ────────────────────────────────────────────── */
+.monaco-editor .margin-view-overlays .line-numbers {
+  font-variant-numeric: tabular-nums !important;
+}
+.monaco-editor .margin-view-overlays .current-line-margin .line-numbers,
+.monaco-editor .line-numbers.active-line-number {
+  color: var(--ac3) !important;
+}
+
+/* ── Glyph margin (lightbulb, git indicators) ────────────────── */
+.monaco-editor .margin-view-overlays .glyph-margin {
+  z-index: 1;
+}
+
+/* ── Current line highlight ──────────────────────────────────── */
+.monaco-editor .current-line {
+  border-radius: 2px;
+}
+
+/* ── Cursor ──────────────────────────────────────────────────── */
+.monaco-editor .cursor {
+  border-left-width: 2px !important;
+}
+
+/* ── Minimap ─────────────────────────────────────────────────── */
+.monaco-editor .minimap {
+  opacity: 0.85;
+  transition: opacity .2s;
+}
+.monaco-editor:hover .minimap { opacity: 1; }
+.monaco-editor .minimap-slider {
+  border-radius: 3px;
+}
+.monaco-editor .minimap-slider:hover {
+  background: rgba(157,92,255,.2) !important;
+}
+.monaco-editor .minimap-decorations-layer {
+  border-radius: 1px;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────── */
+.monaco-editor .scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+.monaco-editor .scrollbar .slider {
+  border-radius: 4px !important;
+  border: 1px solid transparent !important;
+  transition: background .15s, border-color .15s;
+}
+.monaco-editor .scrollbar .slider:hover {
+  border-color: rgba(157,92,255,.2) !important;
+}
+
+/* ── Suggest widget (autocomplete) ───────────────────────────── */
+.monaco-editor .suggest-widget {
+  border-radius: 8px !important;
+  border: 1px solid var(--bd) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,.5) !important;
+  overflow: hidden;
+}
+.monaco-editor .suggest-widget .monaco-list-row.focused {
+  border-radius: 4px !important;
+}
+.monaco-editor .suggest-widget .monaco-list-row .suggest-icon {
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 3px !important;
+}
+/* Type icons colored by kind */
+.monaco-editor .suggest-widget .monaco-list-row .suggest-icon.method { color: #9D5CFF !important; }
+.monaco-editor .suggest-widget .monaco-list-row .suggest-icon.function { color: #9D5CFF !important; }
+.monaco-editor .suggest-widget .monaco-list-row .suggest-icon.class { color: #67E8F9 !important; }
+.monaco-editor .suggest-widget .monaco-list-row .suggest-icon.interface { color: #67E8F9 !important; }
+.monaco-editor .suggest-widget .monaco-list-row .suggest-icon.variable { color: #F0EBFF !important; }
+.monaco-editor .suggest-widget .monaco-list-row .suggest-icon.property { color: #C9A6FF !important; }
+.monaco-editor .suggest-widget .monaco-list-row .suggest-icon.keyword { color: #C9A6FF !important; }
+.monaco-editor .suggest-widget .monaco-list-row .suggest-icon.module { color: #22C55E !important; }
+.monaco-editor .suggest-widget .monaco-list-row .suggest-icon.color { color: #FBBF24 !important; }
+.monaco-editor .suggest-widget .monaco-list-row .suggest-icon.snippet { color: #F87171 !important; }
+.monaco-editor .suggest-widget .details {
+  border-left: 1px solid var(--bd) !important;
+  background: var(--bg1) !important;
+}
+
+/* ── Find widget ─────────────────────────────────────────────── */
+.monaco-editor .find-widget {
+  border-radius: 8px !important;
+  border: 1px solid var(--bd) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,.4) !important;
+  overflow: hidden;
+}
+.monaco-editor .find-widget .input {
+  border-radius: 4px !important;
+}
+
+/* ── Hover widget ────────────────────────────────────────────── */
+.monaco-editor .hover-widget {
+  border-radius: 8px !important;
+  border: 1px solid var(--bd) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,.5) !important;
+  overflow: hidden;
+  max-width: 450px;
+}
+.monaco-editor .hover-widget .hover-contents {
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+}
+
+/* ── Context menu ────────────────────────────────────────────── */
+.monaco-editor .context-menu {
+  border-radius: 8px !important;
+  border: 1px solid var(--bd) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,.6) !important;
+  overflow: hidden;
+}
+.monaco-editor .context-menu .action-item {
+  border-radius: 0 !important;
+}
+
+/* ── Editor focus ring ───────────────────────────────────────── */
+.monaco-editor.focused {
+  outline: none !important;
+}
+.monaco-editor.focused .overflow-guard {
+  border-radius: 0;
+}
+
+/* ── Bracket pair colorization ───────────────────────────────── */
+.monaco-editor .bracket-match {
+  border: 1px solid rgba(157,92,255,.4) !important;
+  border-radius: 2px;
+  background: rgba(157,92,255,.12) !important;
+}
+
+/* ── Code lens (references, etc) ─────────────────────────────── */
+.monaco-editor .code-lens {
+  font-size: 11px !important;
+  color: var(--tx3) !important;
+}
+.monaco-editor .code-lens a {
+  color: var(--ac3) !important;
+}
+.monaco-editor .code-lens a:hover {
+  color: var(--ac) !important;
+  text-decoration: underline;
+}
+
+/* ── Parameter hints ─────────────────────────────────────────── */
+.monaco-editor .parameter-hints-widget {
+  border-radius: 8px !important;
+  border: 1px solid var(--bd) !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,.4) !important;
+}
+
+/* ── Sticky scroll (current scope) ───────────────────────────── */
+.monaco-editor .sticky-line {
+  background: var(--bg1) !important;
+  border-bottom: 1px solid var(--bd) !important;
+  font-weight: 600;
+}

@@ -1,0 +1,53 @@
+<svg width="1200" height="300" viewBox="0 0 1200 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="OrinIDE banner">
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="1200" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0A0616"/>
+      <stop offset="0.5" stop-color="#160B2E"/>
+      <stop offset="1" stop-color="#3B2173"/>
+    </linearGradient>
+    <linearGradient id="ring-grad" x1="280" y1="220" x2="1040" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9D5CFF"/>
+      <stop offset="0.42" stop-color="#7C3AED"/>
+      <stop offset="0.75" stop-color="#3B2173"/>
+      <stop offset="1" stop-color="#160B2E"/>
+    </linearGradient>
+    <linearGradient id="bar-grad" x1="745" y1="845" x2="1080" y2="940" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9D5CFF"/>
+      <stop offset="1" stop-color="#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="text-grad" x1="0" y1="0" x2="700" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F8F6FF"/>
+      <stop offset="1" stop-color="#C9AFFF"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#9D5CFF" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#9D5CFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- background -->
+  <rect width="1200" height="300" fill="url(#bg-grad)"/>
+
+  <!-- oversized ghost logo bleeding off the right edge, mixed into the background -->
+  <g transform="translate(760,-260) scale(0.62)" style="mix-blend-mode:screen" opacity="0.5">
+    <path d="M600 213 A 410 410 0 1 1 248 822" fill="none" stroke="url(#ring-grad)" stroke-width="90" stroke-linecap="round"/>
+    <path d="M458 432 L790 637 L458 842 L458 706 L600 637 L458 568 Z" fill="#F8F6FF"/>
+    <rect x="752" y="848" width="234" height="90" rx="12" fill="url(#bar-grad)"/>
+  </g>
+
+  <!-- soft glow behind the real mark -->
+  <circle cx="165" cy="150" r="150" fill="url(#glow)"/>
+
+  <!-- real logo mark, foreground, left side -->
+  <g transform="translate(45,30) scale(0.175)">
+    <path d="M600 213 A 410 410 0 1 1 248 822" fill="none" stroke="url(#ring-grad)" stroke-width="90" stroke-linecap="round"/>
+    <path d="M458 432 L790 637 L458 842 L458 706 L600 637 L458 568 Z" fill="#F8F6FF"/>
+    <rect x="752" y="848" width="234" height="90" rx="12" fill="url(#bar-grad)"/>
+  </g>
+
+  <!-- wordmark, overlapping the tail edge of the mark -->
+  <text x="255" y="150" font-family="Verdana, Geneva, sans-serif" font-size="72" font-weight="700" fill="url(#text-grad)" style="mix-blend-mode:screen">OrinIDE</text>
+
+  <!-- tagline -->
+  <text x="258" y="192" font-family="Verdana, Geneva, sans-serif" font-size="19" fill="#C9AFFF" opacity="0.9">AI-Powered Browser IDE — Runs Anywhere, No Cloud Required</text>
+</svg>

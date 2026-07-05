@@ -1,0 +1,2013 @@
+/* ================================================================
+   ORIN IDE — OVERRIDES & FINAL PURPLE POLISH
+   ================================================================ */
+
+/* Core palette lives in main.css only — removed duplicate :root block that
+   fought the base theme and made color updates unreliable. */
+
+/* ── Sidebar action buttons — NO more white blobs ─────────────── */
+.sb-actions .ib,
+.sb-actions .ib.sm,
+.sb-section-header .ib,
+.sb-section-header .ib.sm {
+  width: 24px !important; height: 24px !important;
+  min-width: 0 !important; min-height: 0 !important;
+  border: none !important; background: transparent !important;
+  color: var(--tx2) !important; cursor: pointer;
+  display: flex !important; align-items: center !important;
+  justify-content: center !important;
+  border-radius: var(--r2) !important;
+  transition: all .12s; padding: 0 !important; flex-shrink: 0;
+}
+.sb-actions .ib svg, .sb-actions .ib.sm svg,
+.sb-section-header .ib svg, .sb-section-header .ib.sm svg {
+  width: 13px !important; height: 13px !important;
+  display: block !important; flex-shrink: 0;
+}
+.sb-actions .ib:hover, .sb-actions .ib.sm:hover,
+.sb-section-header .ib:hover, .sb-section-header .ib.sm:hover {
+  background: rgba(157,92,255,.15) !important;
+  color: var(--ac3) !important;
+}
+
+/* ── Tab bar right ─────────────────────────────────────────────── */
+.tab-bar-right .ib,
+.tab-bar-right .ib.sm {
+  width: 26px !important; height: 26px !important;
+  border: none !important; background: transparent !important;
+  color: var(--tx2) !important; border-radius: var(--r2) !important;
+  cursor: pointer; display: flex !important; align-items: center !important;
+  justify-content: center !important; transition: all .12s; padding: 0 !important;
+}
+.tab-bar-right .ib svg, .tab-bar-right .ib.sm svg {
+  width: 13px !important; height: 13px !important; display: block !important;
+}
+.tab-bar-right .ib:hover { background: rgba(157,92,255,.12) !important; color: var(--ac3) !important; }
+
+/* ── Run & Preview button ──────────────────────────────────────── */
+.run-preview-btn {
+  display: flex !important; align-items: center; gap: 5px;
+  padding: 4px 12px; margin-right: 4px;
+  background: linear-gradient(135deg,rgba(157,92,255,.2),rgba(124,58,237,.14));
+  border: 1px solid rgba(157,92,255,.4) !important; color: var(--ac3) !important;
+  border-radius: var(--r); font-size: 11px; font-weight: 700;
+  font-family: var(--font); cursor: pointer; transition: all .15s;
+  white-space: nowrap; flex-shrink: 0;
+}
+.run-preview-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
+.run-preview-btn:hover {
+  background: rgba(157,92,255,.3) !important;
+  border-color: var(--ac) !important; color: #fff !important;
+  box-shadow: 0 2px 12px rgba(157,92,255,.3);
+  transform: translateY(-1px);
+}
+
+/* ── Task status bar ───────────────────────────────────────────── */
+.task-status-bar {
+  display: none; align-items: center; gap: 8px;
+  padding: 4px 12px; min-height: 28px; flex-shrink: 0;
+  background: rgba(157,92,255,.07);
+  border-bottom: 1px solid rgba(157,92,255,.2);
+  font-size: 11px; color: var(--tx1);
+}
+.task-status-bar.active { display: flex !important; animation: fadeIn .2s ease; }
+.task-phase-dots { display: flex; gap: 5px; align-items: center; }
+.task-phase-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--bd); transition: all .3s; flex-shrink: 0;
+}
+.task-phase-dot.thinking  { background: var(--cy); box-shadow: 0 0 8px var(--cy); }
+.task-phase-dot.planning  { background: var(--gr); box-shadow: 0 0 8px var(--gr); }
+.task-phase-dot.coding    { background: var(--ac); box-shadow: 0 0 8px var(--ac); animation: phasePulse .6s ease infinite; }
+.task-phase-dot.integrating { background: var(--yw); box-shadow: 0 0 8px var(--yw); }
+@keyframes phasePulse { 0%,100%{opacity:.7}50%{opacity:1} }
+.task-phase-label { flex: 1; font-size: 11px; }
+.task-phase-cancel {
+  display: flex; align-items: center; gap: 4px; padding: 2px 7px;
+  background: transparent; border: 1px solid rgba(248,113,113,.3);
+  color: var(--rd); font-size: 10px; font-family: var(--font);
+  border-radius: 3px; cursor: pointer; transition: background .1s;
+}
+.task-phase-cancel:hover { background: rgba(248,113,113,.1); }
+
+/* ── Active skill chip ─────────────────────────────────────────── */
+#active-skill-chip {
+  align-items: center; gap: 6px; padding: 5px 10px;
+  border-bottom: 1px solid rgba(157,92,255,.15);
+  background: rgba(157,92,255,.05); flex-shrink: 0;
+  min-height: 28px; font-size: 11px;
+}
+
+/* ── Chat header ib buttons ──────────────────────────────────────*/
+.chat-header-right .ib,
+.chat-header-right .ib.sm,
+.agents-header-right .ib,
+.agents-header-right .ib.sm {
+  width: 26px !important; height: 26px !important;
+  border: none !important; background: transparent !important;
+  color: var(--tx2) !important; border-radius: var(--r2) !important;
+  cursor: pointer; display: flex !important; align-items: center !important;
+  justify-content: center !important; transition: all .12s; padding: 0 !important;
+}
+.chat-header-right .ib svg, .agents-header-right .ib svg {
+  width: 13px !important; height: 13px !important; display: block !important;
+}
+.chat-header-right .ib:hover, .agents-header-right .ib:hover {
+  background: rgba(157,92,255,.12) !important; color: var(--ac3) !important;
+}
+
+/* ── Minimal chat input box ────────────────────────────────────── */
+.chat-input-wrap {
+  flex-shrink: 0;
+  border-top: 1px solid rgba(157,92,255,.18);
+  background: var(--bg1);
+  /* Bottom padding lifts the whole input section up from the edge */
+  padding: 0 0 12px 0;
+}
+.chat-row {
+  display: flex; align-items: flex-end; gap: 6px;
+  /* Top padding only — bottom is handled by .chat-input-wrap */
+  padding: 6px 10px 0;
+}
+.chat-input-inner {
+  flex: 1; display: flex; flex-direction: column;
+  /* stretch so textarea fills full width */
+  align-items: stretch;
+  background: var(--bg2);
+  border: 1px solid rgba(157,92,255,.22);
+  border-radius: 12px; overflow: hidden; transition: border-color .15s, box-shadow .15s;
+  /* kill any inherited row-direction gap/padding from main.css */
+  gap: 0; padding: 0;
+}
+.chat-input-inner:focus-within {
+  border-color: var(--ac);
+  box-shadow: 0 0 0 2.5px rgba(157,92,255,.15), 0 4px 20px rgba(157,92,255,.08);
+}
+
+/* ── Textarea — zero inner padding, centered, full width ── */
+textarea#chat-input, .chat-input {
+  /* Fill the full width of the column — critical fix for right-shift bug */
+  width: 100% !important;
+  box-sizing: border-box !important;
+  flex: 1; background: transparent !important;
+  border: none !important; color: var(--tx0);
+  /* Zero horizontal padding as requested */
+  padding: 10px 0 4px !important;
+  font-size: 13px; font-family: var(--font); resize: none; outline: none;
+  min-height: 48px; max-height: 140px; line-height: 1.5;
+  box-shadow: none !important;
+  /* Center the typed text + placeholder */
+  text-align: center;
+  display: block;
+}
+textarea#chat-input::placeholder, .chat-input::placeholder {
+  color: var(--tx3);
+  text-align: center;
+}
+
+/* ── Action buttons row inside the box ── */
+.chat-input-actions {
+  display: flex; align-items: center; justify-content: flex-end;
+  gap: 3px;
+  /* Small padding keeps buttons from touching the border */
+  padding: 4px 6px;
+  border-top: 1px solid rgba(157,92,255,.08);
+  background: rgba(157,92,255,.03);
+}
+.cia-btn {
+  width: 28px; height: 28px; border: none; background: transparent;
+  color: var(--tx3); border-radius: 7px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .12s; flex-shrink: 0; padding: 0;
+}
+.cia-btn:hover { background: rgba(157,92,255,.14); color: var(--ac3); }
+.cia-btn.active { background: rgba(157,92,255,.18); color: var(--ac3); }
+.cia-btn svg { width: 14px; height: 14px; display: block; }
+
+/* ── Send button — glowing purple pill ── */
+button#btn-send, .send-btn {
+  width: 30px !important; height: 30px !important;
+  background: linear-gradient(135deg, #9D5CFF, #7C3AED) !important;
+  border: none !important;
+  border-radius: 8px !important; color: #fff !important;
+  display: flex !important; align-items: center !important;
+  justify-content: center !important; cursor: pointer;
+  transition: all .15s; flex-shrink: 0; padding: 0 !important;
+  box-shadow: 0 2px 12px rgba(157,92,255,.4);
+}
+button#btn-send:hover:not(:disabled) {
+  background: linear-gradient(135deg, #B070FF, #9D5CFF) !important;
+  transform: scale(1.08);
+  box-shadow: 0 4px 20px rgba(157,92,255,.6);
+}
+button#btn-send:active:not(:disabled) { transform: scale(.92); }
+button#btn-send:disabled { opacity: .35; cursor: not-allowed !important; transform: none !important; box-shadow: none; }
+button#btn-send svg { width: 13px !important; height: 13px !important; display: block !important; }
+
+/* ── Extras popup ──────────────────────────────────────────────── */
+.chat-extras-popup {
+  background: var(--bg1); border: 1px solid var(--bd2);
+  border-radius: 10px; margin-bottom: 6px; overflow: hidden;
+  box-shadow: 0 -4px 24px rgba(0,0,0,.5);
+  animation: slideUp .15s ease;
+}
+.chat-extras-popup.hidden { display: none !important; }
+.cep-section { padding: 7px 9px; }
+.cep-label {
+  font-size: 9px; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--tx3); font-weight: 700; margin-bottom: 5px;
+}
+.cep-sep { height: 1px; background: var(--bd); }
+.cep-row { display: flex; flex-wrap: wrap; gap: 4px; }
+.cep-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 4px; }
+.cep-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 7px 4px; background: var(--bg2); border: 1px solid var(--bd);
+  color: var(--tx1); font-size: 10px; font-family: var(--font); font-weight: 500;
+  border-radius: var(--r); cursor: pointer; transition: all .12s; text-align: center;
+}
+.cep-btn:hover {
+  background: rgba(157,92,255,.1); border-color: rgba(157,92,255,.3); color: var(--ac3);
+}
+.cep-btn svg { color: var(--ac3); flex-shrink: 0; }
+.mode-btn {
+  padding: 4px 10px; background: var(--bg2); border: 1px solid var(--bd);
+  color: var(--tx2); font-size: 11px; font-family: var(--font);
+  border-radius: var(--r-pill); cursor: pointer; transition: all .12s;
+  white-space: nowrap;
+}
+.mode-btn:hover { color: var(--tx0); background: var(--bg3); }
+.mode-btn.active {
+  color: var(--ac3); background: rgba(157,92,255,.12);
+  border-color: rgba(157,92,255,.3);
+}
+.attach-preview { display: flex; gap: 4px; flex-wrap: wrap; padding: 4px 0 2px; }
+.attach-preview.hidden { display: none !important; }
+
+/* ── Agents task phases ──────────────────────────────────────────*/
+.agents-task-phases {
+  display: none; align-items: center; gap: 4px; padding: 5px 8px;
+  border-bottom: 1px solid var(--bd); flex-shrink: 0; overflow-x: auto;
+  background: rgba(157,92,255,.03); scrollbar-width: none;
+}
+.agents-task-phases::-webkit-scrollbar { display: none; }
+.agents-task-phases.visible { display: flex !important; animation: fadeIn .2s ease; }
+.phase-btn {
+  display: flex; align-items: center; gap: 4px; padding: 3px 10px;
+  background: transparent; border: 1px solid var(--bd);
+  border-radius: var(--r-pill); font-size: 10px; font-weight: 600;
+  font-family: var(--font); cursor: default; color: var(--tx2);
+  transition: all .2s; white-space: nowrap; flex-shrink: 0;
+}
+.phase-btn .phase-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.phase-btn.active {
+  color: var(--ac3); border-color: rgba(157,92,255,.4);
+  background: rgba(157,92,255,.1);
+}
+
+/* ── Git panel ─────────────────────────────────────────────────── */
+.git-panel {
+  border-top: 1px solid var(--bd); background: var(--bg0);
+  flex-shrink: 0; display: flex; flex-direction: column;
+  max-height: 200px; overflow: hidden;
+}
+.git-panel.hidden { display: none !important; }
+.git-panel-header {
+  display: flex; align-items: center; gap: 7px; padding: 5px 9px;
+  font-size: 11px; font-weight: 600; color: var(--tx1);
+  border-bottom: 1px solid var(--bd); flex-shrink: 0;
+}
+.git-panel-close {
+  margin-left: auto; background: none; border: none; color: var(--tx3);
+  cursor: pointer; padding: 2px; border-radius: 3px; display: flex;
+  align-items: center; justify-content: center; transition: color .1s;
+}
+.git-panel-close:hover { color: var(--rd); }
+.git-panel-close svg { width: 10px; height: 10px; }
+.git-quick-cmds { display: flex; flex-wrap: wrap; gap: 3px; padding: 5px 6px; flex-shrink: 0; }
+.git-cmd-btn {
+  padding: 3px 7px; background: var(--bg2); border: 1px solid var(--bd);
+  color: var(--tx1); font-size: 10px; font-family: var(--mono);
+  border-radius: var(--r2); cursor: pointer; transition: all .1s;
+}
+.git-cmd-btn:hover { background: var(--bg3); border-color: var(--ac); color: var(--ac3); }
+.git-cmd-input-row {
+  display: flex; align-items: center; gap: 5px; padding: 4px 6px;
+  border-top: 1px solid var(--bd); flex-shrink: 0;
+}
+.git-prompt { font-family: var(--mono); font-size: 11px; color: var(--ac3); flex-shrink: 0; }
+.git-cmd-input {
+  flex: 1; background: var(--bg2); border: 1px solid var(--bd); color: var(--tx0);
+  border-radius: var(--r2); padding: 4px 7px; font-size: 11px;
+  font-family: var(--mono); outline: none; transition: border-color .12s;
+}
+.git-cmd-input:focus { 
+  border-color: var(--ac); 
+  box-shadow: 0 0 0 2px rgba(157,92,255,.1); 
+}
+.git-cmd-run {
+  width: 26px; height: 26px; background: var(--ac); border: none;
+  border-radius: var(--r2); color: #fff; display: flex; align-items: center;
+  justify-content: center; cursor: pointer; flex-shrink: 0; transition: all var(--tr-fast);
+}
+.git-cmd-run:hover { 
+  background: var(--ac3); 
+  box-shadow: 0 2px 8px rgba(157,92,255,.3); 
+  transform: scale(1.05); 
+}
+.git-cmd-run:active { transform: scale(0.95); }
+.git-cmd-run svg { width: 11px; height: 11px; display: block; }
+.git-output {
+  flex: 1; overflow-y: auto; padding: 5px 8px; font-family: var(--mono);
+  font-size: 11px; color: var(--tx1); white-space: pre-wrap; min-height: 0;
+}
+
+/* ── Dropzone ─────────────────────────────────────────────────── */
+.dropzone {
+  border: 2px dashed var(--bd2); border-radius: var(--r3);
+  padding: 28px 20px; text-align: center; color: var(--tx2);
+  transition: all .15s; cursor: pointer; background: rgba(157,92,255,.02);
+}
+.dropzone:hover, .dropzone.drag-over {
+  border-color: var(--ac); background: rgba(157,92,255,.07); color: var(--tx0);
+}
+
+/* ── Model picker dropdown ─────────────────────────────────────── */
+.model-picker-dropdown {
+  position: fixed; background: var(--bg1); border: 1px solid var(--bd2);
+  border-radius: var(--r3); z-index: 4000; width: 280px;
+  max-height: 460px; overflow-y: auto; box-shadow: 0 12px 40px rgba(0,0,0,.7);
+  animation: slideUp .15s ease; scrollbar-width: thin;
+}
+.mpd-opt {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  padding: 7px 12px; background: transparent; border: none;
+  color: var(--tx1); font-size: 12px; font-family: var(--font);
+  cursor: pointer; text-align: left; transition: background .08s;
+}
+.mpd-opt svg { color: var(--ac3); flex-shrink: 0; width: 13px; height: 13px; }
+.mpd-opt:hover { background: var(--bg2); color: var(--tx0); }
+.mpd-opt.active { background: rgba(157,92,255,.1); color: var(--ac3); }
+.mpd-section-title {
+  padding: 7px 12px 3px; font-size: 9px; color: var(--tx3);
+  text-transform: uppercase; letter-spacing: .1em; font-weight: 700;
+}
+.mpd-divider { height: 1px; background: var(--bd); margin: 3px 0; }
+.mpd-custom-row { padding: 5px 10px; display: flex; align-items: center; gap: 5px; }
+.mpd-custom-input {
+  flex: 1; background: var(--bg2); border: 1px solid var(--bd); color: var(--tx0);
+  border-radius: var(--r2); padding: 5px 8px; font-size: 11px;
+  font-family: var(--mono); outline: none; transition: border-color .12s;
+}
+.mpd-custom-input:focus { border-color: var(--ac); }
+.mpd-custom-apply {
+  width: 26px; height: 26px; background: var(--ac); border: none;
+  border-radius: var(--r2); color: #fff; display: flex; align-items: center;
+  justify-content: center; cursor: pointer; flex-shrink: 0; transition: background .12s;
+}
+.mpd-custom-apply:hover { background: var(--ac3); }
+.mpd-custom-apply svg { width: 12px; height: 12px; display: block; }
+.mpd-hint { color: var(--tx3); font-size: 9px; font-family: var(--mono); margin-left: 4px; }
+
+.mpd-search-row {
+  display: flex; align-items: center; gap: 6px; padding: 8px 10px;
+  border-bottom: 1px solid var(--bd); color: var(--tx3); flex-shrink: 0;
+  position: sticky; top: 0; background: var(--bg1); z-index: 2;
+}
+.mpd-search-input {
+  flex: 1; background: transparent; border: none; color: var(--tx0);
+  font-size: 12px; font-family: var(--font); outline: none;
+}
+.mpd-search-input::placeholder { color: var(--tx3); }
+.mpd-groups { max-height: 260px; overflow-y: auto; }
+.mpd-provider-group + .mpd-provider-group { border-top: 1px solid var(--bd); }
+.mpd-empty, .mpd-empty-sub {
+  padding: 10px 12px; font-size: 11px; color: var(--tx3); line-height: 1.5;
+}
+.mpd-empty-sub { padding: 4px 12px 8px; }
+
+/* ── Scrollbar everywhere ──────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bd2); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--tx3); }
+* { scrollbar-width: thin; scrollbar-color: var(--bd2) transparent; }
+
+/* ── Animations ────────────────────────────────────────────────── */
+@keyframes fadeIn { from{opacity:0}to{opacity:1} }
+@keyframes slideUp { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
+@keyframes toastIn { from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)} }
+@keyframes spin { to{transform:rotate(360deg)} }
+@keyframes mbox { from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)} }
+
+/* ================================================================
+   MOBILE PERFECT LAYOUT
+   ================================================================ */
+.mob-topbar {
+  height: 44px; flex-shrink: 0; display: none; align-items: center;
+  justify-content: space-between; padding: 0 10px;
+  background: var(--bg1); border-bottom: 1px solid var(--bd); z-index: 200;
+}
+.mt-left { display: flex; align-items: center; gap: 8px; }
+.mt-project {
+  font-size: 13px; font-weight: 600; color: var(--tx0);
+  max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.mt-right { display: flex; align-items: center; gap: 4px; }
+.model-picker-btn {
+  display: flex; align-items: center; gap: 4px; background: var(--bg2);
+  border: 1px solid var(--bd); color: var(--tx1); border-radius: var(--r);
+  padding: 4px 8px; font-size: 11px; font-family: var(--font); cursor: pointer;
+  max-width: 130px; transition: all .12s;
+}
+.model-picker-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 80px; }
+.model-picker-btn:hover { border-color: var(--ac); color: var(--ac3); }
+.mob-tabs {
+  height: 50px; flex-shrink: 0; display: none;
+  background: var(--bg1); border-top: 1px solid var(--bd); z-index: 200;
+  flex-direction: row; align-items: stretch;
+}
+.mob-tab {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 2px; background: transparent; border: none;
+  color: var(--tx3); font-size: 9px; font-weight: 600; font-family: var(--font);
+  cursor: pointer; transition: all var(--tr-fast); padding: 4px 2px;
+  text-transform: uppercase; letter-spacing: .03em;
+}
+.mob-tab svg { width: 17px; height: 17px; transition: transform var(--tr-fast); }
+.mob-tab:active svg { transform: scale(0.85); }
+.mob-tab.active { color: var(--ac3); }
+.mob-tab.active svg { filter: drop-shadow(0 0 6px rgba(157,92,255,.6)); }
+#mob-fab { display: none; position: fixed; bottom: 68px; right: 14px; z-index: 500; }
+#mob-fab-btn {
+  width: 46px; height: 46px; background: linear-gradient(135deg, var(--ac), var(--ac2)); border: none; border-radius: 50%;
+  color: #fff; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; box-shadow: 0 4px 20px rgba(157,92,255,.5); transition: all var(--tr);
+}
+#mob-fab-btn:hover { 
+  box-shadow: 0 6px 28px rgba(157,92,255,.65); 
+  transform: scale(1.08); 
+}
+#mob-fab-btn:active { transform: scale(0.92); }
+#mob-fab-menu {
+  position: absolute; bottom: 54px; right: 0; background: var(--bg1);
+  border: 1px solid var(--bd2); border-radius: var(--r3); padding: 5px;
+  display: none; flex-direction: column; gap: 1px; min-width: 170px;
+  box-shadow: 0 -8px 32px rgba(0,0,0,.6);
+}
+#mob-fab-menu.visible { display: flex; animation: slideUp .15s ease; }
+.fab-item {
+  display: flex; align-items: center; gap: 9px; padding: 8px 10px;
+  background: transparent; border: none; color: var(--tx1); font-size: 12px;
+  font-weight: 500; font-family: var(--font); cursor: pointer;
+  border-radius: var(--r2); transition: all .08s; width: 100%; text-align: left;
+}
+.fab-item:hover { background: rgba(157,92,255,.1); color: var(--tx0); }
+.fab-item svg { color: var(--ac3); flex-shrink: 0; width: 14px; height: 14px; }
+
+@media (max-width: 768px) {
+  .activity-bar { display: none !important; }
+  .rz { display: none !important; }
+  .mob-topbar { display: flex !important; }
+  .mob-tabs { display: flex !important; }
+  #mob-fab { display: block !important; }
+  .run-preview-btn { display: none !important; }
+  .tab-bar-right .ib:not(#btn-save-file) { display: none !important; }
+
+  .app {
+    flex-direction: column !important;
+    padding-top: 44px;
+    padding-bottom: 50px;
+  }
+  .mob-topbar { position: fixed; top: 0; left: 0; right: 0; }
+  .mob-tabs   { position: fixed; bottom: 0; left: 0; right: 0; }
+  #mob-fab    { bottom: 62px !important; }
+
+  .layout-main {
+    flex: 1; position: relative; overflow: hidden;
+    width: 100%; height: 100%;
+  }
+
+  /* All panels stack as full-screen layers */
+  .sidebar, .chat-panel, .agents-panel, .center {
+    position: absolute !important; inset: 0 !important;
+    width: 100% !important; max-width: 100% !important;
+    min-width: 0 !important; display: none !important;
+    flex-direction: column !important;
+  }
+  .sidebar.mob-active  { display: flex !important; }
+  .chat-panel.mob-active { display: flex !important; }
+  .agents-panel.mob-active { display: flex !important; }
+  .center.mob-active   { display: flex !important; }
+
+  .chat-extras-popup { max-height: 60vh; overflow-y: auto; }
+  .cep-grid { grid-template-columns: repeat(4,1fr); }
+}
+@media (max-width: 400px) {
+  .cep-grid { grid-template-columns: repeat(3,1fr); }
+}
+
+/* ================================================================
+   SIDEBAR ITEM FIXES — project list & file tree buttons
+   Fixes the ugly white/colored x and pencil buttons visible in screenshot
+   ================================================================ */
+
+/* ── Project list items (proj-item) ──────────────────────────── */
+.proj-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 4px 10px; font-size: 12px; cursor: pointer; color: var(--tx1);
+  border-radius: 3px; transition: background .08s; user-select: none;
+  min-height: 26px;
+}
+.proj-item:hover { background: rgba(157,92,255,.08); color: var(--tx0); }
+.proj-item.active {
+  background: rgba(157,92,255,.12);
+  border-left: 2px solid var(--ac);
+  padding-left: 8px; color: var(--tx0);
+}
+.proj-item-left {
+  display: flex; align-items: center; gap: 5px; flex: 1; overflow: hidden;
+  min-width: 0;
+}
+.proj-item-left span {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.proj-item-left span:first-child { color: var(--tx3); font-size: 10px; flex-shrink: 0; }
+
+/* ── Project delete button (proj-del) — was ugly "x" ─────────── */
+.proj-del {
+  /* Reset all browser default button styles */
+  all: unset;
+  /* Our clean style */
+  width: 18px !important; height: 18px !important;
+  display: none; align-items: center; justify-content: center;
+  border-radius: 3px !important; cursor: pointer;
+  color: var(--tx3) !important; font-size: 11px; line-height: 1;
+  flex-shrink: 0; transition: all .1s;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  /* Font fallback for the text "x" */
+  font-family: var(--mono);
+}
+.proj-item:hover .proj-del { display: flex !important; }
+.proj-del:hover {
+  color: var(--rd) !important;
+  background: rgba(248,113,113,.12) !important;
+}
+
+/* ── File tree items (ti) ────────────────────────────────────── */
+.ti {
+  display: flex; align-items: center; font-size: 12px; cursor: pointer;
+  color: var(--tx1); border-radius: 3px; min-height: 22px; padding: 1px 4px 1px 0;
+  transition: background .06s, color .06s; user-select: none; position: relative;
+}
+.ti:hover { background: rgba(157,92,255,.07); color: var(--tx0); }
+.ti.active {
+  background: rgba(157,92,255,.12) !important;
+  color: var(--tx0) !important;
+}
+.ti-indent { flex-shrink: 0; display: inline-block; }
+.ti-arrow {
+  width: 14px; height: 14px; flex-shrink: 0; display: flex;
+  align-items: center; justify-content: center; color: var(--tx3);
+  transition: transform .15s;
+}
+.ti-arrow svg { width: 10px; height: 10px; display: block; }
+.ti-arrow.open { transform: rotate(90deg); }
+.ti-icon {
+  flex-shrink: 0; width: 16px; text-align: center;
+  font-size: 12px; color: var(--tx2); margin-right: 2px;
+}
+.ti-name {
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: 12px;
+}
+.ti-children { display: none; }
+.ti-children.open { display: block; }
+
+/* ── File tree action buttons (ti-act) — was ugly pencil/x ───── */
+.ti-actions {
+  display: none; align-items: center; gap: 1px;
+  flex-shrink: 0; margin-left: 2px;
+}
+.ti:hover .ti-actions { display: flex; }
+
+.ti-act {
+  /* Hard reset — kill ALL browser button styling */
+  all: unset;
+  /* Clean icon button */
+  width: 18px !important; height: 18px !important;
+  display: flex !important; align-items: center !important;
+  justify-content: center !important;
+  border-radius: 3px !important; cursor: pointer;
+  color: var(--tx3) !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  font-size: 12px;
+  transition: all .1s; flex-shrink: 0;
+}
+.ti-act svg {
+  width: 10px !important; height: 10px !important;
+  display: block !important; pointer-events: none;
+}
+.ti-act:hover {
+  background: var(--bg3) !important;
+  color: var(--ac3) !important;
+}
+/* Delete button specifically gets red hover */
+.ti-act[data-a="del"]:hover {
+  background: rgba(248,113,113,.12) !important;
+  color: var(--rd) !important;
+}
+/* New-file "+" button in folder */
+.ti-act[data-a="nf"] {
+  font-size: 13px; color: var(--tx3) !important; font-family: var(--font);
+}
+.ti-act[data-a="nf"]:hover { color: var(--ac3) !important; }
+
+/* ── Section headers ─────────────────────────────────────────── */
+.sb-section { padding: 4px 0 4px; border-bottom: 1px solid var(--bd); }
+.sb-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 4px 10px; font-size: 9px; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--tx3); font-weight: 700;
+}
+
+/* ================================================================
+   PURPLE THEME POLISH — UX & VISUAL REFINEMENTS
+   ================================================================ */
+
+/* ── Scrollbars — subtle purple tint ───────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(157,92,255,.25); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(157,92,255,.45); }
+
+/* ── Selection color ────────────────────────────────────────── */
+::selection { background: rgba(157,92,255,.35); color: #fff; }
+
+/* ── Chat panel border enhancement ─────────────────────────── */
+.chat-panel {
+  border-left: 1px solid rgba(157,92,255,.12) !important;
+}
+
+/* ── Chat header — purple accent line ──────────────────────── */
+.chat-header {
+  border-bottom: 1px solid rgba(157,92,255,.15) !important;
+  background: linear-gradient(180deg, rgba(157,92,255,.04) 0%, transparent 100%) !important;
+}
+
+/* ── Mode pills — prettier active state ────────────────────── */
+.mode-btn.active {
+  color: #fff !important;
+  background: linear-gradient(135deg, rgba(157,92,255,.3), rgba(124,58,237,.2)) !important;
+  border-color: rgba(157,92,255,.5) !important;
+  box-shadow: 0 2px 8px rgba(157,92,255,.2);
+}
+
+/* ── Chat messages — user bubble purple glow ───────────────── */
+.msg-user .msg-bubble,
+.chat-msg.user .msg-bubble {
+  background: linear-gradient(135deg, rgba(157,92,255,.18), rgba(124,58,237,.1)) !important;
+  border-color: rgba(157,92,255,.28) !important;
+}
+
+/* ── Hints / quick suggestions ──────────────────────────────── */
+.chat-hints { padding: 4px 10px 2px; gap: 5px; }
+.hint {
+  padding: 4px 10px;
+  background: rgba(157,92,255,.06);
+  border-color: rgba(157,92,255,.18) !important;
+  color: var(--tx2) !important;
+  border-radius: var(--r-pill);
+  transition: all .14s;
+}
+.hint:hover {
+  background: rgba(157,92,255,.14) !important;
+  border-color: var(--ac) !important;
+  color: var(--ac3) !important;
+  transform: translateY(-1px);
+}
+
+/* ── Extras popup — refined ─────────────────────────────────── */
+.chat-extras-popup {
+  border-color: rgba(157,92,255,.3) !important;
+  box-shadow: 0 -8px 32px rgba(0,0,0,.6), 0 0 0 1px rgba(157,92,255,.1) !important;
+}
+
+/* ── Token usage bar ────────────────────────────────────────── */
+.token-usage {
+  border-top-color: rgba(157,92,255,.12) !important;
+}
+
+/* ── Attach preview image thumbnails ────────────────────────── */
+.attach-item {
+  border-color: rgba(157,92,255,.3) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+}
+
+/* ── Chat input bottom wrap — subtle top separator glow ─────── */
+.chat-input-wrap::before {
+  content: '';
+  display: block;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(157,92,255,.3), transparent);
+  margin-bottom: 0;
+}
+
+/* ── Smooth textarea growth transition ──────────────────────── */
+textarea#chat-input {
+  transition: min-height .15s ease;
+}
+
+/* ── Voice active glow ──────────────────────────────────────── */
+.cia-btn.voice-active {
+  background: rgba(157,92,255,.2) !important;
+  color: var(--ac) !important;
+  box-shadow: 0 0 10px rgba(157,92,255,.4);
+  animation: voicePulse .8s ease infinite;
+}
+@keyframes voicePulse {
+  0%,100% { box-shadow: 0 0 8px rgba(157,92,255,.35); }
+  50%      { box-shadow: 0 0 16px rgba(157,92,255,.6); }
+}
+
+/* ── Focus ring on the outer wrap for accessibility ─────────── */
+.chat-input-inner:focus-within {
+  box-shadow: 0 0 0 2.5px rgba(157,92,255,.18),
+              0 6px 24px rgba(157,92,255,.1) !important;
+}
+
+/* ================================================================
+   CODIENT-STYLE FULL UI REDESIGN — PURPLE EDITION
+   Matches: clean top bar, pill tab switcher, rounded panels,
+            glass sidebar, polished chat, avatar buttons
+   ================================================================ */
+
+/* ── 1. ACTIVITY BAR — slimmer, cleaner, icon-only ─────────────── */
+.activity-bar {
+  width: 44px !important;
+  background: var(--bg0) !important;
+  border-right: 1px solid rgba(157,92,255,.1) !important;
+  padding: 8px 0 !important;
+  gap: 0 !important;
+}
+.ab-logo {
+  width: 32px !important; height: 32px !important;
+  margin-bottom: 10px !important;
+  background: transparent !important;
+  border-radius: 8px !important;
+  color: var(--ac) !important;
+}
+.ab-btn {
+  width: 36px !important; height: 36px !important;
+  border-radius: 8px !important;
+  margin: 1px 4px !important;
+}
+.ab-btn svg { width: 16px !important; height: 16px !important; }
+.ab-btn:hover {
+  background: rgba(157,92,255,.12) !important;
+  color: var(--ac3) !important;
+}
+.ab-btn.active {
+  background: rgba(157,92,255,.18) !important;
+  color: var(--ac3) !important;
+}
+.ab-btn.active::before {
+  left: 0px !important; top: 8px !important; bottom: 8px !important;
+  width: 2px !important;
+  box-shadow: 0 0 6px rgba(157,92,255,.8) !important;
+}
+.ab-sep {
+  width: 20px !important; height: 1px !important;
+  background: rgba(157,92,255,.12) !important;
+  margin: 5px auto !important;
+}
+
+/* ── 2. SIDEBAR — glass card style ─────────────────────────────── */
+.sidebar, .sidebar-view {
+  background: var(--bg0) !important;
+  border-right: 1px solid rgba(157,92,255,.1) !important;
+}
+.sb-header {
+  background: var(--bg0) !important;
+  border-bottom: 1px solid rgba(157,92,255,.1) !important;
+  padding: 0 10px 0 14px !important;
+  min-height: 36px !important;
+}
+.sb-title {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1px !important;
+  color: var(--tx3) !important;
+}
+
+/* ── 3. TAB BAR — Codient pill switcher style ───────────────────── */
+.tab-bar {
+  background: var(--bg1) !important;
+  border-bottom: 1px solid rgba(157,92,255,.1) !important;
+  min-height: 38px !important;
+  padding: 0 8px !important;
+  gap: 0 !important;
+}
+.tab-list { gap: 0 !important; }
+.tab-item {
+  height: 30px !important;
+  margin: 4px 1px !important;
+  border-radius: 6px !important;
+  border-right: none !important;
+  border-bottom: none !important;
+  padding: 0 12px !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  color: var(--tx2) !important;
+  background: transparent !important;
+  transition: all .12s !important;
+}
+.tab-item:hover {
+  background: rgba(157,92,255,.08) !important;
+  color: var(--tx0) !important;
+}
+.tab-item.active {
+  background: rgba(157,92,255,.14) !important;
+  color: var(--ac3) !important;
+  border-bottom: none !important;
+  box-shadow: inset 0 0 0 1px rgba(157,92,255,.25) !important;
+}
+
+/* ── Top bar (breadcrumb area) — Codient-style project name row ── */
+.top-bar {
+  background: var(--bg1) !important;
+  border-bottom: 1px solid rgba(157,92,255,.1) !important;
+  min-height: 36px !important;
+  padding: 0 12px !important;
+}
+
+/* ── Breadcrumb ─────────────────────────────────────────────────── */
+.breadcrumb {
+  background: var(--bg0) !important;
+  border-bottom: 1px solid rgba(157,92,255,.08) !important;
+  padding: 0 14px !important;
+  min-height: 28px !important;
+}
+.bc-item { color: var(--tx2) !important; font-size: 11px !important; }
+.bc-item:hover { color: var(--ac3) !important; }
+.bc-sep { color: rgba(157,92,255,.3) !important; }
+
+/* ── 4. CHAT PANEL — clean card like reference ──────────────────── */
+.chat-panel {
+  background: var(--bg0) !important;
+  border-left: 1px solid rgba(157,92,255,.12) !important;
+}
+.chat-header {
+  background: var(--bg0) !important;
+  border-bottom: 1px solid rgba(157,92,255,.1) !important;
+  padding: 0 10px !important;
+  min-height: 38px !important;
+}
+.chat-title {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: var(--tx1) !important;
+  letter-spacing: .3px !important;
+  text-transform: none !important;
+}
+
+/* ── 5. MESSAGES — Codient card bubbles ─────────────────────────── */
+.chat-messages { padding: 10px 10px !important; gap: 10px !important; }
+.msg { max-width: 100% !important; }
+.msg-avatar {
+  width: 26px !important; height: 26px !important;
+  border-radius: 7px !important;
+  font-size: 10px !important;
+}
+.msg.user .msg-avatar {
+  background: linear-gradient(135deg, #9D5CFF, #7C3AED) !important;
+}
+.msg.assistant .msg-avatar {
+  background: var(--bg3) !important;
+  border: 1px solid rgba(157,92,255,.2) !important;
+}
+.msg-body {
+  border-radius: 10px !important;
+  border-color: rgba(157,92,255,.12) !important;
+}
+.msg.user .msg-body {
+  background: linear-gradient(135deg, #9D5CFF, #7C3AED) !important;
+  border-color: transparent !important;
+  box-shadow: 0 2px 12px rgba(157,92,255,.3) !important;
+}
+.msg.assistant .msg-body {
+  background: var(--bg2) !important;
+  border: 1px solid rgba(157,92,255,.1) !important;
+}
+
+/* ── 6. RUN/PREVIEW BUTTON — Codient style pill ─────────────────── */
+.run-preview-btn {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 4px 14px !important;
+  background: linear-gradient(135deg, rgba(157,92,255,.2), rgba(124,58,237,.15)) !important;
+  border: 1px solid rgba(157,92,255,.35) !important;
+  color: var(--ac3) !important;
+  border-radius: 99px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all .15s !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  letter-spacing: .2px !important;
+}
+.run-preview-btn:hover {
+  background: rgba(157,92,255,.3) !important;
+  border-color: var(--ac) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 16px rgba(157,92,255,.4) !important;
+  transform: none !important;
+}
+
+/* ── 7. INLINE CODE ACTION PANEL (apply/cancel bar) ─────────────── */
+.apply-bar {
+  background: var(--bg1) !important;
+  border-top: 1px solid rgba(157,92,255,.12) !important;
+  padding: 7px 10px !important;
+  gap: 6px !important;
+}
+.apply-btn {
+  padding: 4px 14px !important;
+  border-radius: 6px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all .12s !important;
+}
+.apply-btn.primary {
+  background: var(--ac) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 10px rgba(157,92,255,.35) !important;
+}
+.apply-btn.primary:hover {
+  background: #b370ff !important;
+  box-shadow: 0 3px 16px rgba(157,92,255,.5) !important;
+  transform: translateY(-1px) !important;
+}
+.apply-btn.primary:active {
+  transform: translateY(0) !important;
+}
+.apply-btn:not(.primary) {
+  background: var(--bg3) !important;
+  color: var(--tx1) !important;
+  border: 1px solid rgba(157,92,255,.15) !important;
+}
+
+/* ── 8. BOTTOM PANEL — polished ─────────────────────────────────── */
+.bottom-panel {
+  background: var(--bg0) !important;
+  border-top: 1px solid rgba(157,92,255,.12) !important;
+}
+.bp-tabs {
+  background: var(--bg1) !important;
+  border-bottom: 1px solid rgba(157,92,255,.1) !important;
+}
+.bp-tab {
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  padding: 0 12px !important;
+  letter-spacing: .3px !important;
+  border-bottom: 2px solid transparent !important;
+}
+.bp-tab.active {
+  color: var(--ac3) !important;
+  border-bottom-color: var(--ac) !important;
+}
+
+/* ── 9. MODALS — Codient-style rounded glass ────────────────────── */
+.modal-overlay {
+  background: rgba(0,0,0,.65) !important;
+  backdrop-filter: blur(6px) !important;
+}
+.modal-box, .modal-inner {
+  background: var(--bg1) !important;
+  border: 1px solid rgba(157,92,255,.2) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 24px 80px rgba(0,0,0,.8),
+              0 0 0 1px rgba(157,92,255,.05),
+              inset 0 1px 0 rgba(255,255,255,.04) !important;
+}
+.modal-header {
+  border-bottom: 1px solid rgba(157,92,255,.1) !important;
+  padding: 14px 16px !important;
+}
+.modal-title {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: var(--tx0) !important;
+}
+.modal-close {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 6px !important;
+  color: var(--tx3) !important;
+  width: 26px !important; height: 26px !important;
+  cursor: pointer !important;
+  transition: all .12s !important;
+}
+.modal-close:hover {
+  background: rgba(157,92,255,.1) !important;
+  color: var(--tx0) !important;
+}
+
+/* ── 10. INPUT FIELDS everywhere — purple focus ─────────────────── */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="url"],
+input[type="search"],
+select,
+textarea:not(#chat-input) {
+  background: var(--bg2) !important;
+  border: 1px solid var(--bd) !important;
+  color: var(--tx0) !important;
+  border-radius: 7px !important;
+  font-family: var(--font) !important;
+  transition: border-color .15s, box-shadow .15s !important;
+  outline: none !important;
+}
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+select:focus,
+textarea:not(#chat-input):focus {
+  border-color: var(--ac) !important;
+  box-shadow: 0 0 0 2px rgba(157,92,255,.15) !important;
+}
+
+/* ── 11. BUTTONS — base pill refinements ────────────────────────── */
+.btn, button.primary, .startup-btn.primary {
+  border-radius: 8px !important;
+}
+.startup-btn.primary {
+  background: linear-gradient(135deg, #9D5CFF, #7C3AED) !important;
+  box-shadow: 0 4px 18px rgba(157,92,255,.35) !important;
+  transition: all .15s !important;
+}
+.startup-btn.primary:hover {
+  background: linear-gradient(135deg, #b370ff, #9D5CFF) !important;
+  box-shadow: 0 6px 24px rgba(157,92,255,.5) !important;
+  transform: translateY(-2px) !important;
+}
+.startup-btn.primary:active {
+  transform: translateY(0) !important;
+}
+.startup-btn.secondary {
+  background: var(--bg3) !important;
+  border: 1px solid rgba(157,92,255,.2) !important;
+  border-radius: 8px !important;
+  color: var(--tx1) !important;
+}
+.startup-btn.secondary:hover {
+  border-color: rgba(157,92,255,.4) !important;
+  background: rgba(157,92,255,.08) !important;
+  color: var(--tx0) !important;
+}
+
+/* ── 12. THINKING DOTS — purple branded ─────────────────────────── */
+.tdot { background: var(--ac) !important; }
+
+/* ── 13. CONTEXT MENUS / DROPDOWNS — glass card ─────────────────── */
+.context-menu, .dropdown-menu {
+  background: var(--bg1) !important;
+  border: 1px solid rgba(157,92,255,.2) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,.7), 0 0 0 1px rgba(157,92,255,.05) !important;
+  overflow: hidden !important;
+}
+.ctx-item, .dropdown-item {
+  padding: 7px 14px !important;
+  font-size: 12px !important;
+  color: var(--tx1) !important;
+  border-radius: 0 !important;
+  transition: background .08s !important;
+}
+.ctx-item:hover, .dropdown-item:hover {
+  background: rgba(157,92,255,.1) !important;
+  color: var(--tx0) !important;
+}
+.ctx-sep, .dropdown-sep { background: rgba(157,92,255,.1) !important; }
+
+/* ── 14. STATUS BAR (very bottom) ──────────────────────────────── */
+.status-bar {
+  background: linear-gradient(90deg, #1a0d35, #110E1C) !important;
+  border-top: 1px solid rgba(157,92,255,.15) !important;
+}
+
+/* ── 15. TOP BAR PILL SWITCHER (Preview/Design/Code tabs) ─────── */
+/* If a tab-switcher group exists in tab-bar-right, pill-style it */
+.tab-bar-right {
+  gap: 4px !important;
+  align-items: center !important;
+}
+/* The 3 view tabs in the center tab bar area get pill treatment */
+.center .tab-bar {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* ── 16. SCROLL BARS ────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px !important; height: 4px !important; }
+::-webkit-scrollbar-track { background: transparent !important; }
+::-webkit-scrollbar-thumb {
+  background: rgba(157,92,255,.2) !important;
+  border-radius: 4px !important;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(157,92,255,.4) !important; }
+* { scrollbar-width: thin !important; scrollbar-color: rgba(157,92,255,.2) transparent !important; }
+
+/* ── 17. AGENT PANEL — same style ──────────────────────────────── */
+.agents-panel {
+  background: var(--bg0) !important;
+  border-left: 1px solid rgba(157,92,255,.1) !important;
+}
+.agents-header {
+  background: var(--bg0) !important;
+  border-bottom: 1px solid rgba(157,92,255,.1) !important;
+  min-height: 38px !important;
+}
+.agents-send-btn {
+  background: linear-gradient(135deg, #9D5CFF, #7C3AED) !important;
+  border-radius: 8px !important;
+  border: none !important;
+  box-shadow: 0 2px 12px rgba(157,92,255,.4) !important;
+  transition: all .15s !important;
+}
+.agents-send-btn:hover {
+  background: linear-gradient(135deg, #b370ff, #9D5CFF) !important;
+  box-shadow: 0 4px 18px rgba(157,92,255,.55) !important;
+  transform: scale(1.06) !important;
+}
+.agents-send-btn:active {
+  transform: scale(0.94) !important;
+}
+
+/* ── 18. TOAST / NOTIFICATIONS — purple pill ────────────────────── */
+.toast, .notif {
+  background: var(--bg2) !important;
+  border: 1px solid rgba(157,92,255,.25) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,.6), 0 0 0 1px rgba(157,92,255,.08) !important;
+  color: var(--tx0) !important;
+}
+
+/* ── 19. FEATURE HUB / GRID BUTTONS ─────────────────────────────── */
+.fh-card, .feature-card {
+  background: var(--bg2) !important;
+  border: 1px solid rgba(157,92,255,.12) !important;
+  border-radius: 10px !important;
+  transition: all .15s !important;
+}
+.fh-card:hover, .feature-card:hover {
+  border-color: rgba(157,92,255,.35) !important;
+  background: rgba(157,92,255,.07) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(157,92,255,.15) !important;
+}
+
+/* ── 20. RESIZER HANDLES ─────────────────────────────────────────── */
+.rz {
+  background: transparent !important;
+}
+.rz::after {
+  background: rgba(157,92,255,.3) !important;
+}
+.rz:hover::after, .rz.drag::after {
+  background: var(--ac) !important;
+}
+.rz:hover {
+  background: rgba(157,92,255,.06) !important;
+}
+
+/* ── 21. SELECTION / HIGHLIGHT ──────────────────────────────────── */
+::selection {
+  background: rgba(157,92,255,.35) !important;
+  color: #fff !important;
+}
+
+/* ── 22. AI INLINE — lightbulb glyph + popup ───────────────────── */
+.ai-lightbulb {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%239D5CFF' d='M8 1a5 5 0 0 1 3 9V9a3 3 0 1 1-6 0V10a5 5 0 0 1 3-9zM6.5 13h3a1 1 0 0 1 0 2h-3a1 1 0 0 1 0-2z'/%3E%3C/svg%3E") center / 14px no-repeat;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity .15s;
+}
+.ai-lightbulb:hover { opacity: 1; }
+
+.ai-inline-popup {
+  position: absolute;
+  background: var(--bg1);
+  border: 1px solid var(--bd2);
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.6);
+  z-index: 9000;
+  min-width: 150px;
+  animation: slideUp .1s ease;
+}
+.ai-inline-popup button {
+  display: block;
+  width: 100%;
+  padding: 7px 12px;
+  background: transparent;
+  border: none;
+  color: var(--tx1);
+  font-size: 12px;
+  font-family: var(--font);
+  text-align: left;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background .08s;
+}
+.ai-inline-popup button:hover {
+  background: rgba(157,92,255,.12);
+  color: var(--ac3);
+}
+
+/* ── 23. AI INLINE COMMAND PALETTE ─────────────────────────────── */
+.ai-cmd-bar {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(520px, 90%);
+  z-index: 8000;
+  background: var(--bg1);
+  border: 1px solid var(--bd2);
+  border-radius: 10px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.7), 0 0 0 1px rgba(157,92,255,.1);
+  overflow: hidden;
+  animation: slideUp .12s ease;
+}
+.ai-cmd-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+}
+.ai-cmd-icon {
+  color: var(--ac);
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--mono);
+  flex-shrink: 0;
+}
+.ai-cmd-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--tx0);
+  font-size: 13px;
+  font-family: var(--font);
+  outline: none;
+}
+.ai-cmd-input::placeholder { color: var(--tx3); }
+.ai-cmd-list {
+  max-height: 260px;
+  overflow-y: auto;
+  border-top: 1px solid var(--bd);
+  padding: 4px;
+}
+.ai-cmd-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background .06s;
+}
+.ai-cmd-row:hover,
+.ai-cmd-row.focused {
+  background: rgba(157,92,255,.1);
+}
+.ai-cmd-row-icon {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(157,92,255,.12);
+  color: var(--ac3);
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.ai-cmd-row-label {
+  flex: 1;
+  font-size: 12px;
+  color: var(--tx1);
+}
+.ai-cmd-row.focused .ai-cmd-row-label { color: var(--tx0); }
+.ai-cmd-row-key {
+  font-size: 10px;
+  color: var(--tx3);
+  font-family: var(--mono);
+  background: var(--bg3);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+/* ── CONTINUE BUTTON — appears on incomplete AI generation ─────────── */
+.continue-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0 4px;
+  margin-top: 8px;
+  border-top: 1px solid var(--bd);
+  animation: fadeIn .2s ease;
+}
+.continue-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  background: linear-gradient(135deg, var(--ac), var(--ac2));
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.continue-btn:hover {
+  background: linear-gradient(135deg, #b370ff, var(--ac));
+  box-shadow: 0 2px 12px rgba(157,92,255,.4);
+  transform: translateY(-1px);
+}
+.continue-btn:active {
+  transform: scale(.97);
+}
+.continue-btn svg {
+  flex-shrink: 0;
+}
+.continue-hint {
+  font-size: 11px;
+  color: var(--tx3);
+  font-style: italic;
+}
+
+/* ================================================================
+   ENHANCED MICRO-INTERACTIONS & POLISH
+   ================================================================ */
+
+/* ── Activity bar icon hover glow ──────────────────────────────── */
+.ab-btn::after {
+  transition: opacity .15s, transform .15s;
+  opacity: 0;
+}
+.ab-btn:hover::after {
+  opacity: 1;
+}
+
+/* ── File tree expand/collapse animation ────────────────────────── */
+.ti-arrow svg {
+  transition: transform .15s ease;
+}
+.ti-arrow.open svg {
+  transform: rotate(90deg);
+}
+
+/* ── Chat message hover state ──────────────────────────────────── */
+.msg.assistant:hover {
+  border-color: rgba(157,92,255,.2);
+}
+
+/* ── Toast notification entrance ────────────────────────────────── */
+.toast, .notif {
+  animation: toastIn .2s ease;
+}
+
+/* ── Settings provider card selection glow ──────────────────────── */
+.s-provider-item.selected {
+  border-color: var(--ac);
+  box-shadow: 0 0 0 1px rgba(157,92,255,.3), 0 4px 16px rgba(157,92,255,.15);
+}
+
+/* ── Model picker active state ──────────────────────────────────── */
+.mpd-opt.active {
+  background: rgba(157,92,255,.12);
+  color: var(--ac3);
+  font-weight: 600;
+}
+
+/* ── Git command button press state ─────────────────────────────── */
+.git-cmd-btn:active, .git-tp-quick button:active {
+  transform: scale(0.95);
+}
+
+/* ── Mobile FAB pulse animation ─────────────────────────────────── */
+#mob-fab-btn {
+  animation: fabGlow 3s ease-in-out infinite;
+}
+@keyframes fabGlow {
+  0%, 100% { box-shadow: 0 4px 20px rgba(157,92,255,.5); }
+  50% { box-shadow: 0 4px 28px rgba(157,92,255,.7); }
+}
+
+/* ── Chat empty state subtle animation ──────────────────────────── */
+.ce-icon {
+  animation: floatIcon 4s ease-in-out infinite;
+}
+@keyframes floatIcon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* ── Apply button loading state ─────────────────────────────────── */
+.apply-btn.loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.7;
+}
+.apply-btn.loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid transparent;
+  border-top-color: var(--ac);
+  animation: spin .6s linear infinite;
+}
+
+/* ── Modal backdrop blur enhancement ────────────────────────────── */
+.modal-bg {
+  transition: backdrop-filter .2s ease;
+}
+
+/* ── Tab close button ──────────────────────────────────────────── */
+.tab-close {
+  transition: all .1s ease;
+  border-radius: 3px;
+}
+.tab-close:hover {
+  background: rgba(248,113,113,.15);
+  color: var(--rd);
+}
+
+/* ── Terminal command highlight ──────────────────────────────────── */
+.tl.cmd { color: var(--ac3); font-weight: 600; }
+.tl.err { color: var(--rd); }
+.tl.warn { color: var(--yw); }
+.tl.info { color: var(--cy); }
+.tl.success { color: var(--gr); }
+
+/* ── Smooth panel resize transitions ────────────────────────────── */
+.sidebar, .chat-panel, .agents-panel {
+  transition: width .15s ease, min-width .15s ease;
+}
+
+/* ── Enhanced scrollbar for code blocks ─────────────────────────── */
+.msg-body pre::-webkit-scrollbar,
+.diff-code::-webkit-scrollbar {
+  height: 4px;
+}
+.msg-body pre::-webkit-scrollbar-thumb,
+.diff-code::-webkit-scrollbar-thumb {
+  background: rgba(157,92,255,.3);
+  border-radius: 2px;
+}
+
+/* ── Keyboard shortcut badge style ──────────────────────────────── */
+kbd {
+  background: var(--bg2);
+  border: 1px solid var(--bd);
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--tx1);
+  line-height: 1.4;
+}
+
+/* ── Code block language label ──────────────────────────────────── */
+.msg-body pre[data-lang]::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--tx3);
+  letter-spacing: .5px;
+  pointer-events: none;
+}
+
+/* ── Purple glow border for focused elements ────────────────────── */
+.chat-input:focus-within,
+.sb-search-input:focus,
+input[type="text"]:focus,
+textarea:focus {
+  box-shadow: 0 0 0 2px rgba(157,92,255,.12);
+}
+
+/* ================================================================
+   VISUAL HIERARCHY & POLISH — Final pass
+   ================================================================ */
+
+/* ── Chat panel purple separator glow ───────────────────────────── */
+.chat-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(157,92,255,.2), transparent 30%, transparent 70%, rgba(157,92,255,.2));
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Sidebar purple accent line ─────────────────────────────────── */
+.sidebar::after, .sidebar-view::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(157,92,255,.15), transparent 40%, transparent 60%, rgba(157,92,255,.15));
+  pointer-events: none;
+}
+
+/* ── Welcome screen card hover effects ──────────────────────────── */
+.welcome-features .fh-card {
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.welcome-features .fh-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(157,92,255,.15);
+  border-color: rgba(157,92,255,.35);
+}
+
+/* ── Activity bar active icon glow ──────────────────────────────── */
+.ab-btn.active {
+  position: relative;
+}
+.ab-btn.active svg {
+  filter: drop-shadow(0 0 4px rgba(157,92,255,.5));
+}
+
+/* ── Tab active state enhanced ──────────────────────────────────── */
+.tab-item.active {
+  position: relative;
+}
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  right: 20%;
+  height: 2px;
+  background: var(--ac);
+  border-radius: 1px 1px 0 0;
+  box-shadow: 0 0 8px rgba(157,92,255,.4);
+}
+
+/* ── Bottom panel tab active state ──────────────────────────────── */
+.bp-tab.active {
+  position: relative;
+}
+.bp-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: var(--ac);
+  border-radius: 1px;
+}
+
+/* ── Chat input area subtle gradient ────────────────────────────── */
+.chat-input-wrap {
+  background: linear-gradient(180deg, var(--bg0), rgba(8,8,12,.98)) !important;
+}
+
+/* ── Mode button transitions ────────────────────────────────────── */
+.cmode-btn {
+  transition: all .15s ease;
+}
+.cmode-btn:active {
+  transform: scale(0.95);
+}
+
+/* ── Toast notification types with left border ──────────────────── */
+.toast.ok { border-left: 3px solid var(--gr); }
+.toast.err { border-left: 3px solid var(--rd); }
+.toast.wrn { border-left: 3px solid var(--yw); }
+.toast.inf { border-left: 3px solid var(--ac); }
+
+/* ── Apply button enhanced states ───────────────────────────────── */
+.apply-btn.primary {
+  position: relative;
+  overflow: hidden;
+}
+.apply-btn.primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.1), transparent);
+  transition: left .3s ease;
+}
+.apply-btn.primary:hover::before {
+  left: 100%;
+}
+
+/* ── Code block header bar ──────────────────────────────────────── */
+.msg-body pre {
+  position: relative;
+}
+.msg-body pre code {
+  display: block;
+  padding: 12px;
+}
+
+/* ── AI thinking animation enhanced ─────────────────────────────── */
+.msg-thinking {
+  padding: 8px 0;
+}
+.msg-thinking-dot {
+  width: 7px;
+  height: 7px;
+}
+
+/* ── Continue button icon animation ─────────────────────────────── */
+.continue-btn svg {
+  transition: transform .15s ease;
+}
+.continue-btn:hover svg {
+  transform: translateX(2px);
+}
+
+/* ── Model picker dropdown polish ───────────────────────────────── */
+.mpd-opt {
+  transition: all .08s ease;
+}
+.mpd-opt:active {
+  transform: scale(0.98);
+}
+
+/* ── Settings modal tab content transition ──────────────────────── */
+.settings-tab-content {
+  animation: fadeIn .15s ease;
+}
+
+/* ── Git panel output scroll shadow ─────────────────────────────── */
+.git-output {
+  position: relative;
+}
+
+/* ── File tree item active indicator ────────────────────────────── */
+.tree-item.active {
+  position: relative;
+}
+.tree-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--ac);
+  border-radius: 0 1px 1px 0;
+}
+
+/* ── Search input icon ──────────────────────────────────────────── */
+.sb-search {
+  position: relative;
+}
+
+/* ── Agent message hover effect ─────────────────────────────────── */
+.agent-msg {
+  transition: border-color .15s ease, background .15s ease;
+}
+.agent-msg:hover {
+  border-color: rgba(157,92,255,.2);
+  background: rgba(157,92,255,.03);
+}
+
+/* ── Welcome screen subtitle fade ───────────────────────────────── */
+.splash-sub {
+  animation: fadeIn .5s ease .3s both;
+}
+
+/* ── Startup panel button transitions ───────────────────────────── */
+.startup-btn {
+  transition: all .15s ease;
+}
+.startup-btn:active {
+  transform: scale(0.97) !important;
+}
+
+/* ── Enhanced scrollbar for all panels ──────────────────────────── */
+.chat-messages::-webkit-scrollbar,
+.agents-messages::-webkit-scrollbar,
+.file-tree::-webkit-scrollbar {
+  width: 5px;
+}
+.chat-messages::-webkit-scrollbar-thumb,
+.agents-messages::-webkit-scrollbar-thumb,
+.file-tree::-webkit-scrollbar-thumb {
+  background: rgba(157,92,255,.2);
+  border-radius: 3px;
+}
+.chat-messages::-webkit-scrollbar-thumb:hover,
+.agents-messages::-webkit-scrollbar-thumb:hover,
+.file-tree::-webkit-scrollbar-thumb:hover {
+  background: rgba(157,92,255,.4);
+}
+
+/* ── Purple accent line at top of modals ────────────────────────── */
+.modal-box::before {
+  content: '';
+  display: block;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--ac), transparent);
+  border-radius: var(--r3) var(--r3) 0 0;
+}
+
+/* ── Tab bar bottom separator glow ──────────────────────────────── */
+.tab-bar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(157,92,255,.15), transparent);
+  pointer-events: none;
+}
+.tab-bar {
+  position: relative;
+}
+
+/* ================================================================
+   INTERACTION FEEDBACK & PERFORMANCE
+   ================================================================ */
+
+/* ── Button hover state enhancement ─────────────────────────────── */
+.startup-btn.primary,
+.apply-btn.primary,
+.continue-btn,
+.send-btn,
+.git-cmd-run {
+  position: relative;
+  overflow: hidden;
+}
+.startup-btn.primary::after,
+.apply-btn.primary::after,
+.continue-btn::after,
+.send-btn::after,
+.git-cmd-run::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,.15), transparent 60%);
+  opacity: 0;
+  transition: opacity .2s ease;
+  pointer-events: none;
+}
+.startup-btn.primary:hover::after,
+.apply-btn.primary:hover::after,
+.continue-btn:hover::after,
+.send-btn:hover::after,
+.git-cmd-run:hover::after {
+  opacity: 1;
+}
+
+/* ── Card hover ripple effect ────────────────────────────────────── */
+.fh-card, .s-provider-item, .agent-msg {
+  position: relative;
+  overflow: hidden;
+}
+.fh-card::after, .s-provider-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(157,92,255,.08), transparent 60%);
+  opacity: 0;
+  transition: opacity .2s ease;
+  pointer-events: none;
+}
+.fh-card:hover::after, .s-provider-item:hover::after {
+  opacity: 1;
+}
+
+/* ── Active state feedback ───────────────────────────────────────── */
+.ab-btn:active,
+.bp-tab:active,
+.tab-item:active,
+.tree-item:active,
+.mob-tab:active {
+  transform: scale(0.97);
+}
+
+/* ── Loading state for buttons ───────────────────────────────────── */
+.btn-loading {
+  position: relative;
+  pointer-events: none;
+  color: transparent !important;
+}
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin: -8px 0 0 -8px;
+  border: 2px solid var(--bd);
+  border-top-color: var(--ac);
+  border-radius: 50%;
+  animation: spin .6s linear infinite;
+}
+
+/* ── Subtle background pattern for depth ─────────────────────────── */
+.app {
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(157,92,255,.03), transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(124,58,237,.03), transparent 40%);
+}
+
+/* ── Enhanced code block styling ─────────────────────────────────── */
+.msg-body pre {
+  background: var(--bg0);
+  border: 1px solid var(--bd);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.msg-body pre code {
+  display: block;
+  padding: 12px;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--tx1);
+  tab-size: 2;
+}
+
+/* ── Chat message timestamp ──────────────────────────────────────── */
+.msg-time {
+  font-size: 9px;
+  color: var(--tx3);
+  margin-top: 4px;
+  font-family: var(--mono);
+}
+
+/* ── Enhanced apply bar ──────────────────────────────────────────── */
+.apply-bar {
+  background: linear-gradient(180deg, var(--bg0), rgba(8,8,12,.98));
+}
+.apply-btn {
+  position: relative;
+  overflow: hidden;
+}
+.apply-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.05), transparent);
+  pointer-events: none;
+}
+
+/* ── Settings provider card status indicator ─────────────────────── */
+.s-provider-item.has-key::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gr);
+  box-shadow: 0 0 6px rgba(34,197,94,.5);
+}
+
+/* ── Model badge active state ────────────────────────────────────── */
+.model-badge.active {
+  background: rgba(157,92,255,.15);
+  border-color: var(--ac);
+  color: var(--ac3);
+}
+
+/* ── Git panel quick command hover ────────────────────────────────── */
+.git-cmd-btn {
+  position: relative;
+}
+.git-cmd-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.05), transparent);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .15s ease;
+}
+.git-cmd-btn:hover::after {
+  opacity: 1;
+}
+
+/* ── Chat hints container ────────────────────────────────────────── */
+.chat-hints {
+  scrollbar-width: none;
+}
+.chat-hints::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Enhanced mode pills ─────────────────────────────────────────── */
+.mode-btn {
+  position: relative;
+  overflow: hidden;
+}
+.mode-btn.active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.1), transparent);
+  pointer-events: none;
+}
+
+/* ── Terminal input enhanced focus ────────────────────────────────── */
+.term-input:focus {
+  box-shadow: 0 0 0 2px rgba(157,92,255,.1);
+}
+
+/* ── File tree folder icon color ──────────────────────────────────── */
+.tree-icon.folder {
+  color: var(--ac3);
+}
+
+/* ── Enhanced search results ─────────────────────────────────────── */
+.search-result {
+  transition: background .1s ease;
+}
+.search-result:hover {
+  background: rgba(157,92,255,.05);
+}
+.search-result-match {
+  background: rgba(157,92,255,.2);
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+/* ================================================================
+   FINAL POLISH — iteration 89
+   ================================================================ */
+
+/* ── Enhanced button hover states ─────────────────────────────── */
+button:hover:not(:disabled) {
+  transition: all var(--tr-fast);
+}
+button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* ── Enhanced input focus states ──────────────────────────────── */
+input:focus, textarea:focus, select:focus {
+  transition: border-color var(--tr), box-shadow var(--tr);
+}
+
+/* ── Enhanced link hover states ────────────────────────────────── */
+a {
+  transition: color var(--tr-fast);
+}
+a:hover {
+  color: var(--ac3);
+}
+
+/* ── Enhanced selection color ──────────────────────────────────── */
+::selection {
+  background: rgba(157,92,255,.35);
+  color: #fff;
+}

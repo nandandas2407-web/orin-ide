@@ -1,0 +1,217 @@
+/* ============================================================
+   GLASS + CLAY — OrinIDE premium visual layer
+   ------------------------------------------------------------
+   Loaded last, on top of main.css / overrides.css / mobile.css.
+   Two techniques, used deliberately rather than everywhere:
+
+   • GLASS  — frosted, translucent, blurred. Used on surfaces that
+     float above content: modals, dropdowns, the mobile tab bar,
+     toasts, the FAB, panel chrome (top bars / tab bars).
+
+   • CLAY   — soft dual-shadow depth (a dark shadow below-right,
+     a faint purple glow above-left, a thin inner highlight along
+     the top edge). Used on things you press: buttons, active
+     tabs, chips, the send button, the mobile nav's active icon.
+
+   Nothing here changes layout, only paint — safe to remove by
+   deleting the <link> in index.html without breaking anything.
+   ============================================================ */
+
+:root {
+  --glass-bg:      rgba(20, 18, 32, 0.62);
+  --glass-bg-soft: rgba(22, 20, 36, 0.46);
+  --glass-border:  rgba(157, 92, 255, 0.16);
+  --glass-blur:    18px;
+
+  --clay-shadow-d: 6px 6px 14px rgba(0, 0, 0, 0.45);
+  --clay-shadow-l: -3px -3px 10px rgba(157, 92, 255, 0.05);
+  --clay-inset:    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                    inset 0 -1px 0 rgba(0, 0, 0, 0.35);
+  --clay-press:    inset 3px 3px 8px rgba(0, 0, 0, 0.5),
+                    inset -2px -2px 6px rgba(157, 92, 255, 0.06);
+}
+
+/* ---------- Base surface: subtle depth everywhere ---------- */
+body {
+  background:
+    radial-gradient(1200px 800px at 15% -10%, rgba(157, 92, 255, 0.07), transparent 60%),
+    radial-gradient(900px 700px at 110% 10%, rgba(124, 58, 237, 0.06), transparent 55%),
+    var(--bg0);
+}
+
+/* ---------- GLASS: floating chrome ---------- */
+.top-bar,
+.tab-bar,
+.term-session-bar,
+.bp-tabs,
+.chat-mode-bar,
+.mob-topbar,
+.mob-tabs,
+#mob-fab-btn,
+.modal-box,
+.toast,
+.quickopen-box,
+.cmdpalette-box,
+.dropdown-menu,
+.model-picker-menu {
+  background: var(--glass-bg) !important;
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  border-color: var(--glass-border) !important;
+}
+
+.sidebar,
+.chat-panel,
+.agents-panel,
+.bottom-panel {
+  background: var(--glass-bg-soft) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  backdrop-filter: blur(14px) saturate(130%);
+}
+
+/* ---------- CLAY: pressable surfaces ---------- */
+.w-btn,
+.ib,
+.bp-tab,
+.mode-btn,
+.chat-tool-btn,
+.hint,
+.term-btn,
+.term-action-btn,
+.run-preview-btn,
+.msg-action-btn,
+.apply-btn,
+.continue-btn,
+button.tab,
+.session-item,
+.model-picker-btn {
+  border-radius: var(--r);
+  box-shadow: var(--clay-shadow-d), var(--clay-shadow-l), var(--clay-inset);
+  transition: box-shadow var(--tr-fast), transform var(--tr-fast), color var(--tr-fast), border-color var(--tr-fast);
+}
+.w-btn:hover,
+.ib:hover,
+.bp-tab:hover,
+.mode-btn:hover,
+.chat-tool-btn:hover,
+.hint:hover,
+.term-btn:hover,
+.term-action-btn:hover,
+.run-preview-btn:hover,
+.model-picker-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--ac-glow);
+}
+.w-btn:active,
+.ib:active,
+.bp-tab:active,
+.mode-btn:active,
+.chat-tool-btn:active,
+.hint:active,
+.term-btn:active,
+.term-action-btn:active,
+button.tab:active,
+#mob-fab-btn:active {
+  box-shadow: var(--clay-press) !important;
+  transform: translateY(0) scale(0.98);
+}
+
+/* Active / selected states get a soft purple clay glow instead of a flat fill */
+.bp-tab.active,
+.mode-btn.active,
+.mob-tab.active,
+button.tab.active,
+.hint.active {
+  box-shadow:
+    var(--clay-shadow-d),
+    0 0 0 1px rgba(157, 92, 255, 0.35),
+    0 0 16px rgba(157, 92, 255, 0.25),
+    var(--clay-inset);
+}
+
+/* ---------- Inputs: recessed glass, glowing focus ---------- */
+.chat-input,
+.term-input,
+.git-term-input,
+input[type="text"],
+input[type="search"],
+input[type="password"],
+textarea {
+  background: rgba(10, 9, 16, 0.55) !important;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--clay-press);
+  border-radius: var(--r);
+  transition: box-shadow var(--tr), border-color var(--tr);
+}
+.chat-input:focus,
+.term-input:focus,
+input[type="text"]:focus,
+input[type="search"]:focus,
+textarea:focus {
+  box-shadow: var(--clay-press), 0 0 0 2px rgba(157, 92, 255, 0.35), 0 0 18px rgba(157, 92, 255, 0.18);
+  outline: none;
+}
+
+/* ---------- Chat bubbles: soft clay cards ---------- */
+.msg-body,
+.msg {
+  border-radius: var(--r3) !important;
+}
+.msg.user .msg-body {
+  box-shadow: var(--clay-shadow-d), var(--clay-shadow-l);
+}
+.msg.assistant .msg-body,
+.msg.ai .msg-body {
+  box-shadow: var(--clay-shadow-d), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* ---------- Modals: glass card with clay lift ---------- */
+.modal-box {
+  border-radius: var(--r3) !important;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.55),
+    0 0 0 1px var(--glass-border),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* ---------- Scrollbars: thin glass ---------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(157, 92, 255, 0.35) transparent;
+}
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb {
+  background: rgba(157, 92, 255, 0.28);
+  border-radius: 99px;
+}
+*::-webkit-scrollbar-thumb:hover { background: rgba(157, 92, 255, 0.5); }
+*::-webkit-scrollbar-track { background: transparent; }
+
+/* ---------- FAB: glassy floating clay orb ---------- */
+#mob-fab-btn {
+  box-shadow:
+    var(--clay-shadow-d),
+    0 0 24px rgba(157, 92, 255, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* ---------- Reduced-motion respect ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .w-btn, .ib, .bp-tab, .mode-btn, .chat-tool-btn, .hint,
+  .term-btn, .term-action-btn, button.tab, #mob-fab-btn {
+    transition: none;
+  }
+}
+
+/* ---------- Mobile tuning ---------- */
+@media (max-width: 768px) {
+  .mob-tabs, .mob-topbar {
+    -webkit-backdrop-filter: blur(22px) saturate(150%);
+    backdrop-filter: blur(22px) saturate(150%);
+  }
+  .mob-tab.active svg {
+    filter: drop-shadow(0 0 8px rgba(157, 92, 255, 0.65));
+  }
+  .modal-box { border-radius: 0 !important; }
+}
